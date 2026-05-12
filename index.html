@@ -1,0 +1,2278 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IBS W8｜CAGE Distance, Semiglobalization & Global Value Chains</title>
+<style>
+/* ════════════════════════════════════════════
+   NTU W8 palette — CAGE / GVC
+   ════════════════════════════════════════════ */
+:root{
+  --ntu:#002B5C; --ntu2:#01356F; --gold:#C9A227;
+  --paper:#F4F7FC; --ink:#0B1220; --muted:#475569;
+  --muted2:#64748B; --line:#D7DEE9; --card:#FFFFFF;
+  --shadow:0 10px 30px rgba(2,6,23,.10);
+  --radius:16px; --radius2:20px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  /* W8 segment colors */
+  --s0:#0E4C3A;   /* Opening — deep teal-green */
+  --t1:#7B2F00;   /* Ghemawat 2009 — brown */
+  --t2:#1A4A8B;   /* CAGE — deep blue */
+  --t3:#5B21B6;   /* GVC — purple */
+  --c1:#0E7490;   /* Drama — cyan */
+  --c2:#B45309;   /* Michelin / NPV case — amber */
+  --s1:#065F46;   /* Memo — forest */
+  /* CAGE dimension hues */
+  --c-cult:#DC2626;  /* Cultural — red */
+  --c-adm:#7C3AED;   /* Administrative — purple */
+  --c-geo:#059669;   /* Geographic — green */
+  --c-eco:#D97706;   /* Economic — amber */
+  /* Auxiliary tokens (added v3) */
+  --brand:#B45309;   /* ODM card accent — amber (distinct from --ntu brand side cards) */
+  --surface:#FBFCFE; /* Light surface background for nested panels */
+  --green:#15803D;   /* Success/completed green */
+  --sub:#94A3B8;     /* Neutral slate for scaffold/hint box borders */
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{font-family:var(--sans);font-size:16px;color:var(--ink);
+  background:radial-gradient(1200px 600px at 8% 0%,rgba(0,43,92,.07),transparent 55%),
+             radial-gradient(900px 500px at 96% 4%,rgba(201,162,39,.10),transparent 55%),
+             var(--paper);}
+
+/* ── Topbar ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:13px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;
+  background:rgba(244,247,252,.94);backdrop-filter:blur(10px);z-index:20;}
+.brand{display:flex;gap:12px;align-items:center;min-width:0;}
+.logo{width:50px;height:50px;display:grid;place-items:center;border-radius:14px;
+  background:linear-gradient(135deg,var(--ntu),var(--ntu2));color:#fff;
+  font-weight:900;letter-spacing:.08em;box-shadow:0 8px 22px rgba(0,43,92,.28);font-size:13px;}
+.brandText{min-width:0;}
+.course{font-size:11px;color:var(--muted);letter-spacing:.03em;}
+.topic{font-size:17px;font-weight:900;color:var(--ntu);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;
+  font-weight:700;cursor:pointer;transition:.12s ease;font-size:13px;color:var(--ink);}
+.btn:hover{border-color:rgba(0,43,92,.35);box-shadow:0 6px 16px rgba(0,0,0,.08);}
+.btn:active{transform:translateY(1px);}
+.btn.gold{border-color:rgba(201,162,39,.45);background:rgba(201,162,39,.12);color:#5A4600;}
+.btn.primary{background:var(--ntu);color:#fff;border-color:var(--ntu);}
+.btn.primary:hover{background:var(--ntu2);border-color:var(--ntu2);color:#fff;}
+
+/* ── Utility rows / inline monospace (added v3) ── */
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.mono{font-family:var(--mono);font-weight:700;padding:1px 6px;border-radius:6px;
+  background:rgba(0,43,92,.06);color:var(--ntu);font-size:.92em;}
+
+/* ── General-purpose data table (added v3; used by .tbl) ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);}
+.tbl th,.tbl td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;line-height:1.5;}
+.tbl th{background:rgba(0,43,92,.06);color:var(--ntu);font-weight:800;font-size:12.5px;letter-spacing:.02em;}
+.tbl tbody tr:nth-child(even){background:rgba(244,247,252,.55);}
+.tbl tbody tr:hover{background:rgba(201,162,39,.06);}
+
+/* ── Reveal box (toggle hints/export; added v3) ── */
+.revealBox{display:none;}
+.revealBox.visible{display:block;animation:fadeSlide .3s ease;}
+
+/* ── Layout ── */
+.layout{display:grid;grid-template-columns:288px 1fr;gap:18px;padding:18px;
+  max-width:1480px;margin:0 auto;}
+
+/* ── Sidebar ── */
+.sidebar{position:sticky;top:86px;align-self:start;
+  border:1px solid var(--line);border-radius:var(--radius2);
+  background:rgba(255,255,255,.78);backdrop-filter:blur(8px);
+  box-shadow:var(--shadow);padding:14px;
+  max-height:calc(100vh - 104px);overflow-y:auto;}
+.navTitle{font-size:10px;color:var(--muted);letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:10px;padding:0 4px;}
+.navItem{width:100%;text-align:left;padding:9px 11px;border-radius:11px;
+  border:1px solid transparent;background:transparent;cursor:pointer;
+  font-weight:700;font-size:13px;color:var(--ntu2);display:block;
+  transition:.1s ease;margin-bottom:2px;line-height:1.35;}
+.navItem:hover{background:rgba(0,43,92,.06);}
+.navItem.active{background:rgba(0,43,92,.10);border-color:rgba(0,43,92,.18);}
+.navItem.seg-s0.active{background:rgba(14,76,58,.10);border-color:rgba(14,76,58,.25);color:var(--s0);}
+.navItem.seg-t1.active{background:rgba(123,47,0,.10);border-color:rgba(123,47,0,.25);color:var(--t1);}
+.navItem.seg-t2.active{background:rgba(26,74,139,.10);border-color:rgba(26,74,139,.25);color:var(--t2);}
+.navItem.seg-t3.active{background:rgba(91,33,182,.10);border-color:rgba(91,33,182,.25);color:var(--t3);}
+.navItem.seg-c1.active{background:rgba(14,116,144,.10);border-color:rgba(14,116,144,.25);color:var(--c1);}
+.navItem.seg-c2.active{background:rgba(180,83,9,.10);border-color:rgba(180,83,9,.25);color:var(--c2);}
+.navItem.seg-s1.active{background:rgba(6,95,70,.10);border-color:rgba(6,95,70,.25);color:var(--s1);}
+.navFooter{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
+.hint{font-size:11px;color:var(--muted);line-height:1.5;}
+.kbd{font-family:var(--mono);font-weight:900;padding:2px 6px;
+  border:1px solid var(--line);border-radius:7px;background:#fff;
+  color:var(--muted);font-size:10px;}
+
+/* ── Content ── */
+.content{border:1px solid var(--line);border-radius:var(--radius2);
+  background:rgba(255,255,255,.88);backdrop-filter:blur(8px);
+  box-shadow:var(--shadow);padding:24px;min-height:calc(100vh - 160px);}
+.sectionHead{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:14px;margin-bottom:20px;}
+.h1{font-size:27px;font-weight:900;color:var(--ntu);margin:0;line-height:1.18;}
+.sub{margin:6px 0 0;color:var(--muted);line-height:1.5;font-size:15px;}
+.tag{display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(0,43,92,.25);background:rgba(0,43,92,.08);
+  color:var(--ntu);padding:8px 14px;border-radius:999px;
+  font-weight:800;white-space:nowrap;font-size:13px;}
+
+/* time tracker */
+.timeTracker{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.timePill{font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;color:var(--muted);}
+.timePill.s0{background:var(--s0);color:#fff;border-color:var(--s0);}
+.timePill.t1{background:var(--t1);color:#fff;border-color:var(--t1);}
+.timePill.t2{background:var(--t2);color:#fff;border-color:var(--t2);}
+.timePill.t3{background:var(--t3);color:#fff;border-color:var(--t3);}
+.timePill.c1{background:var(--c1);color:#fff;border-color:var(--c1);}
+.timePill.c2{background:var(--c2);color:#fff;border-color:var(--c2);}
+.timePill.s1{background:var(--s1);color:#fff;border-color:var(--s1);}
+.timePill.cur{opacity:1!important;}
+
+/* ── Cards / Grid ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.card{border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);}
+.cardTitle{font-weight:900;color:var(--ntu);margin:0 0 10px;font-size:15px;}
+.p{margin:0;color:var(--ink);line-height:1.65;font-size:15px;}
+.ul{margin:8px 0 0 20px;color:var(--ink);line-height:1.65;font-size:15px;}
+.ul li{margin-bottom:5px;}
+.sm{font-size:13px;color:var(--muted);}
+hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0;}
+
+/* ── Callout ── */
+.callout{border-left:5px solid var(--ntu);padding:12px 14px;
+  background:rgba(0,43,92,.05);border-radius:12px;margin:10px 0;line-height:1.6;}
+.callout.gold{border-color:var(--gold);background:rgba(201,162,39,.08);}
+.callout.green{border-color:#15803d;background:rgba(21,128,61,.06);}
+.callout.purple{border-color:#7C3AED;background:rgba(124,58,237,.06);}
+.callout.red{border-color:#DC2626;background:rgba(220,38,38,.05);}
+.callout.orange{border-color:#B45309;background:rgba(180,83,9,.07);}
+.callout.teal{border-color:#0E7490;background:rgba(14,116,144,.06);}
+.callout strong{color:var(--ntu);}
+.callout.gold strong{color:#7C5500;}
+.callout.green strong{color:#14532D;}
+.callout.purple strong{color:#5B21B6;}
+.callout.red strong{color:#991B1B;}
+.callout.orange strong{color:#7C2D12;}
+.callout.teal strong{color:#164E63;}
+
+/* ── Pill row ── */
+.pillRow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+.pill{border:1px solid var(--line);background:#fff;border-radius:999px;
+  padding:6px 11px;font-weight:700;font-size:13px;
+  display:flex;align-items:center;gap:6px;color:var(--ink);}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.dot.b{background:var(--ntu);}
+.dot.g{background:#15803d;}
+.dot.p{background:#7C3AED;}
+.dot.r{background:#DC2626;}
+.dot.o{background:#B45309;}
+.dot.t{background:#0E7490;}
+
+/* ── Poll / Quiz ── */
+.qBox{border:1.5px dashed rgba(0,43,92,.28);background:rgba(0,43,92,.03);
+  border-radius:14px;padding:14px;}
+.qTitle{font-weight:900;margin:0 0 10px;color:var(--ntu);font-size:15px;}
+.options{display:grid;gap:8px;}
+.opt{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;
+  cursor:pointer;font-weight:700;text-align:left;transition:.1s ease;
+  font-size:14px;color:var(--ink);}
+.opt:hover{border-color:rgba(0,43,92,.35);box-shadow:0 6px 16px rgba(0,0,0,.07);}
+.opt.chosen{border-color:rgba(0,43,92,.50);background:rgba(0,43,92,.06);}
+.opt.correct{border-color:#15803d;background:rgba(21,128,61,.09);color:#14532d;}
+.opt.wrong{border-color:#DC2626;background:rgba(220,38,38,.07);color:#7f1d1d;}
+.opt[disabled]{cursor:default;}
+.barWrap{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.bar{height:11px;border-radius:999px;background:rgba(0,0,0,.06);
+  overflow:hidden;flex:1;border:1px solid var(--line);}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--ntu));
+  transition:width .4s ease;}
+.smallVote{color:var(--muted);font-size:12px;font-family:var(--mono);}
+
+/* ── Sliders ── */
+.sliderRow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0;}
+input[type=range]{width:min(340px,100%);accent-color:var(--ntu);cursor:pointer;}
+.valBadge{font-family:var(--mono);font-weight:800;padding:5px 10px;
+  border:1px solid var(--line);border-radius:10px;background:#fff;
+  font-size:14px;color:var(--ntu);}
+
+/* ── Game containers ── */
+.gameBox{border:2px solid var(--line);border-radius:var(--radius);
+  padding:20px;background:var(--card);box-shadow:var(--shadow);margin:14px 0;}
+.gameTitle{font-weight:900;font-size:15px;color:var(--ntu);margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;}
+.gameTag{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;background:rgba(0,43,92,.1);color:var(--ntu);}
+.gameInstr{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.55;}
+.gameReveal{border-left:4px solid var(--gold);background:rgba(201,162,39,.06);
+  border-radius:0 10px 10px 0;padding:12px 14px;font-size:13px;line-height:1.6;
+  display:none;margin-top:12px;}
+.gameReveal.visible{display:block;animation:fadeSlide .35s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.gameBtnRow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.gameBtn{border:1.5px solid var(--line);background:#fff;border-radius:999px;
+  padding:8px 16px;font-weight:700;cursor:pointer;transition:.12s;font-size:13px;}
+.gameBtn:hover{border-color:var(--ntu);color:var(--ntu);}
+.gameBtn.primary{background:var(--ntu);color:#fff;border-color:var(--ntu);}
+.gameBtn.primary:hover{background:#01356F;}
+.gameBtn.success{background:#14532D;color:#fff;border-color:#14532D;}
+
+/* ── Classify drag-drop (CAGE buckets) ── */
+.classifyRow{display:flex;gap:10px;flex-wrap:wrap;}
+.classifyCol{flex:1;min-width:170px;border:2px dashed var(--line);
+  border-radius:14px;padding:12px;min-height:120px;transition:.15s;}
+.classifyCol.over{border-color:var(--ntu);background:rgba(0,43,92,.04);}
+.classifyColTitle{font-weight:900;font-size:12px;text-align:center;
+  margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+.classifyCol[data-cat="cultural"]{border-color:rgba(220,38,38,.45);}
+.classifyCol[data-cat="cultural"] .classifyColTitle{color:var(--c-cult);}
+.classifyCol[data-cat="admin"]{border-color:rgba(124,58,237,.45);}
+.classifyCol[data-cat="admin"] .classifyColTitle{color:var(--c-adm);}
+.classifyCol[data-cat="geo"]{border-color:rgba(5,150,105,.45);}
+.classifyCol[data-cat="geo"] .classifyColTitle{color:var(--c-geo);}
+.classifyCol[data-cat="eco"]{border-color:rgba(217,119,6,.45);}
+.classifyCol[data-cat="eco"] .classifyColTitle{color:var(--c-eco);}
+.classifyChip{border:1.5px solid var(--line);background:#fff;border-radius:10px;
+  padding:8px 10px;cursor:grab;font-weight:700;font-size:12px;
+  color:var(--ink);user-select:none;transition:.1s ease;
+  margin-bottom:6px;line-height:1.4;}
+.classifyChip:hover{border-color:rgba(0,43,92,.40);}
+.classifyChip.correct-chip{border-color:#15803d;background:rgba(21,128,61,.09);}
+.classifyChip.wrong-chip{border-color:#DC2626;background:rgba(220,38,38,.06);}
+.classifyBank{display:flex;gap:8px;flex-wrap:wrap;min-height:50px;
+  padding:10px;border:2px dashed rgba(0,43,92,.18);border-radius:12px;
+  background:rgba(0,43,92,.02);margin-bottom:10px;}
+
+/* ── CAGE heat map ── */
+.cageMap{width:100%;border-collapse:collapse;margin:14px 0;font-size:12px;}
+.cageMap th,.cageMap td{border:1px solid var(--line);padding:8px 6px;text-align:center;vertical-align:middle;}
+.cageMap th{background:rgba(0,43,92,.06);color:var(--ntu);font-weight:900;font-size:11px;}
+.cageMap td{cursor:pointer;transition:.15s;}
+.cageMap td:hover{background:rgba(201,162,39,.15);}
+.cageMap td.sel{outline:3px solid var(--gold);outline-offset:-3px;font-weight:900;}
+.cageMap .low{background:rgba(21,128,61,.12);color:#14532d;}
+.cageMap .mid{background:rgba(217,119,6,.12);color:#7C2D12;}
+.cageMap .high{background:rgba(220,38,38,.15);color:#991b1b;}
+.cageMap .qm{background:rgba(148,163,184,.18);color:#334155;font-style:italic;}
+
+/* ── AAA picker ── */
+.aaaGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
+.aaaCard{border:2px solid var(--line);border-radius:14px;padding:14px;
+  cursor:pointer;text-align:left;transition:.15s;background:#fff;}
+.aaaCard:hover{border-color:rgba(0,43,92,.35);}
+.aaaCard.chosen{border-color:var(--ntu);background:rgba(0,43,92,.04);box-shadow:0 6px 18px rgba(0,43,92,.12);}
+.aaaIcon{font-size:30px;display:block;margin-bottom:8px;}
+.aaaLabel{font-weight:900;font-size:14px;color:var(--ntu);margin-bottom:4px;}
+.aaaDesc{font-size:11.5px;color:var(--muted);line-height:1.5;}
+
+/* ── GVC governance mode picker ── */
+.gvcRow{display:flex;gap:6px;margin:12px 0;overflow-x:auto;padding-bottom:6px;}
+.gvcCard{flex:1;min-width:120px;border:2px solid var(--line);border-radius:12px;
+  padding:10px 8px;cursor:pointer;text-align:center;transition:.15s;background:#fff;}
+.gvcCard:hover{border-color:rgba(91,33,182,.40);}
+.gvcCard.chosen{border-color:var(--t3);background:rgba(91,33,182,.06);
+  box-shadow:0 6px 18px rgba(91,33,182,.14);}
+.gvcLabel{font-weight:900;font-size:12px;color:var(--t3);margin-bottom:4px;}
+.gvcBar{height:6px;border-radius:999px;margin:6px 0 4px;
+  background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444);}
+.gvcTag{font-size:10px;color:var(--muted);font-weight:700;}
+
+/* ── Scenario Flipper ── */
+.sceneFlipper{border:1.5px solid var(--line);border-radius:16px;overflow:hidden;margin:14px 0;}
+.sceneNav{display:flex;border-bottom:1px solid var(--line);}
+.sceneTab{flex:1;padding:10px 6px;font-weight:800;font-size:12px;cursor:pointer;
+  text-align:center;color:var(--muted);transition:.1s ease;border-right:1px solid var(--line);}
+.sceneTab:last-child{border-right:none;}
+.sceneTab.active{background:var(--c1);color:#fff;}
+.sceneTab:hover:not(.active){background:rgba(14,116,144,.08);}
+.sceneBody{padding:18px;}
+
+/* ── Memo Scaffold ── */
+.memoScaffold{display:flex;flex-direction:column;gap:14px;margin:10px 0;}
+.memoLayer{border-left:4px solid var(--line);padding:12px 14px;border-radius:0 10px 10px 0;
+  background:rgba(244,247,252,.5);transition:.15s;}
+.memoLayer:focus-within{background:#fff;}
+.memoLayer.l1{border-color:var(--t2);}
+.memoLayer.l2{border-color:var(--t1);}
+.memoLayer.l3{border-color:var(--t3);}
+.memoLayer.l4{border-color:var(--s1);}
+.memoLayerLabel{font-weight:900;font-size:13px;margin-bottom:4px;}
+.memoPrompt{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
+.memoField{width:100%;border:1.5px dashed var(--line);border-radius:8px;padding:10px 12px;
+  font-size:13px;font-family:var(--sans);resize:vertical;min-height:80px;
+  background:transparent;color:var(--ink);transition:.15s;}
+.memoField:focus{outline:none;border-color:var(--t3);border-style:solid;background:#fff;}
+.memoField.has-content{border-style:solid;border-color:var(--gold);}
+.memoWordCount{font-size:11px;color:var(--muted);text-align:right;margin-top:3px;}
+
+/* ── NPV calculator ── */
+.npvBox{border:2px solid var(--c2);border-radius:16px;padding:18px;
+  background:linear-gradient(180deg,rgba(180,83,9,.04),rgba(180,83,9,.01));
+  margin:12px 0;}
+.npvGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.npvInput{display:flex;flex-direction:column;gap:4px;
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;}
+.npvInputLabel{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.03em;}
+.npvInputRow{display:flex;align-items:center;gap:10px;}
+.npvValue{font-family:var(--mono);font-weight:900;color:var(--c2);font-size:15px;
+  min-width:80px;text-align:right;}
+.npvResult{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
+.npvResultCard{background:#fff;border:1.5px solid var(--c2);border-radius:12px;padding:12px;text-align:center;}
+.npvResultLabel{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;}
+.npvResultValue{font-family:var(--mono);font-weight:900;font-size:22px;color:var(--c2);margin-top:4px;}
+.npvDecisionGood{color:#15803d!important;}
+.npvDecisionBad{color:#DC2626!important;}
+
+/* ── Worksheet styles ── */
+.wsCard{border:1px solid var(--line);border-radius:14px;padding:16px;
+  margin-bottom:14px;background:#fff;}
+.wsLabel{font-weight:900;color:var(--ntu);font-size:14px;margin-bottom:10px;}
+.wsTextarea{width:100%;min-height:120px;border:1.5px solid var(--line);
+  border-radius:12px;padding:12px;font-family:var(--sans);font-size:14px;
+  line-height:1.6;resize:vertical;outline:none;color:var(--ink);}
+.wsTextarea:focus{border-color:rgba(0,43,92,.50);}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--ntu);color:#fff;
+  padding:10px 18px;border-radius:999px;font-weight:700;font-size:13px;
+  opacity:0;transform:translateY(8px);transition:.2s ease;pointer-events:none;z-index:99;}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* ── Presenter mode ── */
+.presenter .sidebar{display:none;}
+.presenter .layout{grid-template-columns:1fr;}
+.presenter .h1{font-size:32px;}
+.presenter .p,.presenter .ul{font-size:17px;}
+.presenter .card{padding:20px;}
+
+/* ── C2 combined slider+results panel (added v5) ── */
+.c2Panel{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-top:8px;}
+.c2Sliders{padding:12px;background:var(--surface);border-radius:12px;border:1px solid var(--line);}
+.c2SlideRow{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;margin-bottom:4px;}
+.c2SlideLabel{font-weight:700;font-size:13px;color:var(--ink);}
+.c2SlideVal{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;font-family:var(--mono);color:var(--c2);font-size:14px;}
+.c2Results{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;}
+.c2Results .npvResultCard{margin:0;}
+
+/* ── AI Hint Card (v6_4) — 輕量提示卡，可收合 ── */
+.aiHint{
+  margin:8px 14px 0 14px;
+  padding:10px 14px;
+  background:linear-gradient(135deg,#FDF7E5 0%,#FAEFD4 100%);
+  border:1px solid var(--gold);
+  border-left:5px solid var(--gold);
+  border-radius:var(--radius2);
+  display:grid;grid-template-columns:auto 1fr auto;gap:14px;
+  align-items:center;font-size:13px;
+  transition:all .25s ease;
+}
+.aiHint.collapsed{padding:6px 14px;}
+.aiHint.collapsed .aiHintBody,.aiHint.collapsed .aiHintTriple{display:none;}
+.aiHint.collapsed .aiHintTitle{font-size:12px;font-weight:700;}
+.aiHintIcon{font-size:24px;line-height:1;}
+.aiHint.collapsed .aiHintIcon{font-size:16px;}
+.aiHintCore{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.aiHintTitle{font-weight:800;color:#7C5500;font-size:13px;}
+.aiHintBody{color:var(--ink);line-height:1.5;font-size:12px;}
+.aiHintTriple{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;}
+.aiHintChip{
+  background:rgba(255,255,255,0.75);
+  border:1px solid var(--gold);
+  border-radius:999px;
+  padding:3px 10px;font-size:11px;font-weight:700;
+  color:#7C5500;white-space:nowrap;
+}
+.aiHintClose{
+  background:transparent;border:none;cursor:pointer;
+  color:#7C5500;font-size:18px;font-weight:800;
+  padding:4px 10px;border-radius:6px;
+  transition:background .15s;
+}
+.aiHintClose:hover{background:rgba(201,162,39,0.2);}
+.aiHint.collapsed .aiHintClose::before{content:"展開";font-size:11px;font-weight:700;}
+.aiHint:not(.collapsed) .aiHintClose::before{content:"收合 ▲";font-size:11px;font-weight:700;}
+@media(max-width:700px){
+  .aiHint{grid-template-columns:auto 1fr;}
+  .aiHintClose{grid-column:1/-1;justify-self:end;}
+}
+
+/* Responsive */
+@media(max-width:880px){
+  .c2Panel{grid-template-columns:1fr;}
+  .c2SlideRow{grid-template-columns:120px 1fr 70px;}
+  .c2Results{grid-template-columns:1fr;}
+  .layout{grid-template-columns:1fr;}
+  .sidebar{position:static;max-height:none;}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr;}
+  .aaaGrid{grid-template-columns:1fr;}
+  .npvGrid,.npvResult{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">NTU<br>IBS</div>
+    <div class="brandText">
+      <div class="course">IBS 2026 · International Business Strategy</div>
+      <div class="topic">W8 · Distance · GVC · Michelin 海外擴張與 NPV 評估 · <span style="background:#475569;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:800;">STUDENT 學生版</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn" id="btnLang">EN / 中</button>
+    <button class="btn gold" id="btnStudent">📝 Worksheet</button>
+    <button class="btn" id="btnPresenter">投影模式</button>
+    <button class="btn" id="btnReset">↺ Reset</button>
+    <button class="btn" id="btnHelp">?</button>
+  </div>
+</div>
+
+<!-- ══ AI 互動提示卡 v6_4 — 輕量提示卡，可收合 ══ -->
+<div class="aiHint" id="aiHint">
+  <div class="aiHintIcon">🤖</div>
+  <div class="aiHintCore">
+    <div class="aiHintTitle">本堂包含 3 個 AI 對話練習</div>
+    <div class="aiHintBody">
+      分別在 T / C2 / S1 段落進行。
+    </div>
+    <div class="aiHintTriple">
+      <span class="aiHintChip">🎯 T · 治理結構 vs 道德譴責 · 5min</span>
+      <span class="aiHintChip">🏢 C2 · 保守派 CFO 質詢 · 3min</span>
+      <span class="aiHintChip">📝 S1 · 三位 CFO 書評 · 5min</span>
+    </div>
+  </div>
+  <button class="aiHintClose" id="aiHintClose" aria-label="收合提示"></button>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="navTitle">W8 Segments</div>
+    <button class="navItem seg-s0" data-view="s0">🎬 S0 · 開場 · 劇情 + 本週路線圖 · 5 min</button>
+    <button class="navItem seg-t1" data-view="t">🧭 T · Part 1+2：距離 × 治理（成衣業整合）· 28 min <span style="font-size:9px;color:var(--gold);">🎮</span></button>
+    <button class="navItem seg-c1" data-view="c1">🏭 C1 · Part 3a：Michelin 案例定位 · 20 min <span style="font-size:9px;color:var(--gold);">🎮</span></button>
+    <button class="navItem seg-c2" data-view="c2">💰 C2 · Part 3b：NPV + 碳成本試算 · 25 min <span style="font-size:9px;color:var(--gold);">🎮</span></button>
+    <button class="navItem seg-s1" data-view="s1">📝 S1 · 策略備忘錄（四層） · 5 min <span style="font-size:9px;color:var(--gold);">🎮</span></button>
+    <hr class="sep"/>
+    <button class="navItem" data-view="student">📋 Student Worksheet</button>
+    <div class="navFooter">
+      <div class="hint">⬅ ➡ 切換段落<br/><span class="kbd">L</span> 語言 <span class="kbd">P</span> 投影 <span class="kbd">R</span> 重置</div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="content" id="content"></main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const STORE = "ibs_w8_2026_v6_4";
+const VIEW_ORDER = ["s0","t","c1","c2","s1","student"];
+
+// ═══ TEACHER/STUDENT MODE FLAG ═══
+// This flag is set at build time. Default: student.
+const IS_TEACHER = /*BUILD_FLAG_TEACHER*/false;
+
+
+const DEF = {
+  lang:"zh", presenter:false, view:"s0",
+  polls:{}, quizDone:{}, sliders:{},
+  classifyDone:{},
+  aaaChoice:null, gvcChoice:null,
+  cageSel:null,
+  sceneTabs:{c1:0},
+  // Michelin Project Gemini NPV — user adjustable
+  // disc (%), carbon ($/tCO2), eff (0/1 = include efficiency gains on existing production)
+  npv:{disc:7.75, carbon:114, eff:1},
+  // C1: 3-location guessing table (Kansas / Vietnam / Poland × 5 dimensions)
+  c1Guess:{}, c1RevealKey:false,
+  // C2: snapshots for scenario compare
+  c2Snapshots:[],
+  ws:{}
+};
+let ST = load();
+
+const content = document.getElementById("content");
+const toast   = document.getElementById("toast");
+
+function load(){ try{const s=localStorage.getItem(STORE);return s?{...DEF,...JSON.parse(s)}:{...DEF};}catch(e){return{...DEF};} }
+function save(){ try{localStorage.setItem(STORE,JSON.stringify(ST));}catch(e){} }
+function showToast(m){toast.textContent=m;toast.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+// CJK-aware word counter (added v3)
+// - Counts each CJK ideograph as 1 "word"
+// - Counts space-separated runs of Latin/digits as 1 "word"
+function countWords(text){
+  if(!text||!text.trim()) return 0;
+  const s = text.trim();
+  const cjk = (s.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g)||[]).length;
+  const latin = s.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g," ").trim();
+  const latinWords = latin ? latin.split(/\s+/).filter(Boolean).length : 0;
+  return cjk + latinWords;
+}
+
+// ═══ POLL helpers ═══
+function getPoll(k){return ST.polls[k]||{a:0,b:0,c:0,d:0,e:0,choice:null};}
+function vote(k,ch){const p=getPoll(k);if(p.choice)p[p.choice]=Math.max(0,(p[p.choice]||0)-1);p.choice=ch;p[ch]=(p[ch]||0)+1;ST.polls[k]=p;save();}
+function tot(p){return(p.a||0)+(p.b||0)+(p.c||0)+(p.d||0)+(p.e||0);}
+function pct(p,k){const t=tot(p);return t?Math.round((p[k]||0)/t*100):0;}
+
+function pollCard({key,title,title_en,opts,followup,followup_en}){
+  const p=getPoll(key); const t=tot(p); const zh=ST.lang==="zh";
+  const ttl=zh?title:title_en;
+  const fup=zh?followup:followup_en;
+  return `<div class="qBox">
+    <p class="qTitle">📊 ${ttl}</p>
+    <div class="options">
+      ${opts.map(([k,lz,le])=>`<button class="opt${p.choice===k?' chosen':''}" data-poll="${key}" data-opt="${k}">${k.toUpperCase()}. ${zh?lz:le}</button>`).join("")}
+    </div>
+    ${t>0?`<div style="margin-top:10px;display:grid;gap:4px;">
+      ${opts.map(([k,lz,le])=>`<div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:30px;font-weight:900;font-family:var(--mono);font-size:12px;">${pct(p,k)}%</span>
+        <div class="bar"><div class="fill" style="width:${pct(p,k)}%"></div></div>
+        <span style="font-size:12px;color:var(--muted)">${k.toUpperCase()}. ${zh?lz:le}</span>
+      </div>`).join("")}
+      <div class="barWrap"><span class="smallVote">${t} 票 / votes</span></div>
+    </div>`:`<div class="barWrap"><div class="bar"><div class="fill" style="width:0%"></div></div><span class="smallVote">${t} 票</span></div>`}
+    ${fup&&fup.length?`<hr class="sep"/><p class="sm" style="font-weight:800;margin-bottom:6px;">💬 ${zh?"討論追問":"Discussion prompts"}</p>
+    <ul class="ul" style="font-size:13px;margin-top:0;color:var(--muted);">${fup.map(q=>`<li>${q}</li>`).join("")}</ul>`:``}
+  </div>`;
+}
+
+function quizCard({key,q,q_en,opts,ans,exp,exp_en}){
+  const zh=ST.lang==="zh"; const done=ST.quizDone[key];
+  return `<div class="qBox">
+    <p class="qTitle">🧠 ${zh?q:q_en}</p>
+    <div class="options">
+      ${opts.map(([lz,le],i)=>`<button class="opt${done===i+1?(i===ans?' correct':' wrong'):''}" data-quiz="${key}" data-idx="${i}" ${done?'disabled':''}>
+        ${String.fromCharCode(65+i)}. ${zh?lz:le}
+      </button>`).join("")}
+    </div>
+    ${done?`<div class="callout ${done-1===ans?'green':'red'}" style="margin-top:10px;">
+      <p class="p" style="font-size:13px;">${done-1===ans?"✅":"❌"} ${zh?exp:exp_en}</p>
+    </div>`:`<div class="barWrap"><div class="bar"><div class="fill" style="width:0%"></div></div><span class="smallVote">${zh?"選一個選項":"Pick an option"}</span></div>`}
+  </div>`;
+}
+
+function timeTags(cur){
+  const zh=ST.lang==="zh";
+  const segs=[
+    ["s0",zh?"🎬 S0 開場":"🎬 S0 Opening","5min"],
+    ["t",zh?"🧭 T 距離×治理":"🧭 T Distance×Gov","28min"],
+    ["c1",zh?"🏭 C1 Michelin":"🏭 C1 Michelin","20min"],
+    ["c2",zh?"💰 C2 NPV":"💰 C2 NPV","25min"],
+    ["s1",zh?"📝 S1 Memo":"📝 S1 Memo","5min"],
+  ];
+  return `<div class="timeTracker">${segs.map(([k,l,t])=>`<span class="timePill ${k} ${k===cur?'cur':''}" style="${k===cur?'':'opacity:.5'}">${l} ${t}</span>`).join("")}</div>`;
+}
+
+
+// ════════════════════════════════════════════
+//  VIEW S0 — Opening: plot recap + roadmap
+//  Added in v6.2: prevents blank page when default view is s0.
+// ════════════════════════════════════════════
+function viewS0(){
+  const zh=ST.lang==="zh";
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"🎬 S0｜開場：從下町火箭 S2 到距離、治理與投資評估":"🎬 S0 | Opening: From Shitamachi Rocket S2 to Distance, Governance, and Investment Evaluation"}</h1>
+      <p class="sub">${zh?"劇情快速回顧 · 本週整合路線圖 · 先建立問題意識":"Quick plot recap · Integrated roadmap · Framing today's core questions"}</p>
+    </div>
+    <div class="tag">5 min</div>
+  </div>
+  ${timeTags("s0")}
+
+  <div class="grid2" style="margin-bottom:14px;">
+    <div class="card">
+      <p class="cardTitle">${zh?"📺 S2 Ep4-5 劇情回顧":"📺 S2 Ep4-5 Plot Recap"}</p>
+      <ul class="ul">
+        ${zh?`
+        <li><strong>第 4 話</strong>：佃製作所通過帝國重工的信用調查，開始推動併購 <strong>Gear Ghost</strong>。同時，Gear Ghost 的開發情報外洩給競爭對手 <strong>KE Machinery（凱馬機械）</strong>，內通者被揭露為律師 <strong>末長</strong>。</li>
+        <li><strong>第 5 話</strong>：Gear Ghost 與 KE Machinery 的專利侵害訴訟進入第一次口頭辯論。若敗訴，Gear Ghost 的存續將受到重大威脅。</li>
+        <li><strong>殿村線</strong>：殿村一邊在佃製作所工作、一邊協助家中務農，最後做出離職返鄉務農的決定。</li>
+        <li><strong>本週連結</strong>：劇情本身不是國際擴張案例，但它提供兩個可延伸的策略問題：小型供應商面對大廠的<strong>權力不對稱</strong>，以及企業是否應該將關鍵活動留在內部的<strong>垂直整合選擇</strong>。</li>
+        `:`
+        <li><strong>Ep 4</strong>: Tsukuda clears Teikoku Heavy Industries' due diligence and starts pushing the acquisition of <strong>Gear Ghost</strong>. At the same time, Gear Ghost's development information is leaked to rival <strong>KE Machinery</strong>; the insider is revealed to be lawyer <strong>Suenaga</strong>.</li>
+        <li><strong>Ep 5</strong>: The patent-infringement lawsuit between Gear Ghost and KE Machinery reaches its first oral hearing. A loss would threaten Gear Ghost's survival.</li>
+        <li><strong>Tonomura line</strong>: Tonomura balances work at Tsukuda with helping his family farm and eventually decides to leave the firm and return to farming.</li>
+        <li><strong>Connection to this week</strong>: The plot itself is not an international-expansion case, but it raises two strategic issues: <strong>power asymmetry</strong> between a small supplier and a large firm, and <strong>vertical integration</strong> of key activities.</li>
+        `}
+      </ul>
+      <p class="sm" style="margin-top:10px;color:var(--muted);font-style:italic;">${zh?"提醒：S2 Ep4-5 是日本國內劇情；本週會把劇情中的權力不對稱與垂直整合，延伸到全球價值鏈與海外投資評估。":"Note: S2 Ep4-5 is a domestic-Japan storyline; this week extends its power-asymmetry and vertical-integration themes to GVCs and overseas investment evaluation."}</p>
+    </div>
+
+    <div class="card" style="border-left:5px solid var(--gold);">
+      <p class="cardTitle" style="color:#7C5500;">${zh?"🧭 本週路線圖":"🧭 This Week's Roadmap"}</p>
+      <ol style="margin:6px 0 0 18px;line-height:1.8;font-size:14px;">
+        <li>${zh?"<strong>T｜距離 × 治理（成衣業整合）</strong>：用 CAGE 判斷跨國距離，再用 GVC 治理模式分析價值如何被創造與分配。":"<strong>T | Distance × Governance (Apparel integration)</strong>: Use CAGE to diagnose cross-border distance, then use GVC governance to analyze value creation and appropriation."}</li>
+        <li>${zh?"<strong>C1｜Michelin 案例定位</strong>：比較 Kansas、Vietnam、Poland 三種投資地點，理解為何海外擴張不能只看低成本。":"<strong>C1 | Michelin case positioning</strong>: Compare Kansas, Vietnam, and Poland to see why overseas expansion cannot be evaluated by low cost alone."}</li>
+        <li>${zh?"<strong>C2｜NPV + 碳成本試算</strong>：把折現率、碳價與營運風險放進同一個投資判斷。":"<strong>C2 | NPV + carbon-cost calculation</strong>: Put discount rate, carbon price, and operating risk into one investment decision."}</li>
+        <li>${zh?"<strong>S1｜策略備忘錄</strong>：整合 CAGE、GVC 與 NPV，寫出可辯護的策略建議。":"<strong>S1 | Strategy memo</strong>: Integrate CAGE, GVC, and NPV into a defensible recommendation."}</li>
+      </ol>
+      <div class="callout orange" style="margin-top:12px;">
+        <p class="p" style="font-size:13px;">${zh?"<strong>核心問題：</strong>跨國擴張不是「去哪裡比較便宜」而已，而是要同時判斷距離造成的摩擦、治理結構造成的價值分配，以及投資案在數字上是否站得住腳。":"<strong>Core question:</strong> Cross-border expansion is not simply about choosing the cheapest location. It requires assessing distance frictions, governance-driven value distribution, and whether the investment is financially defensible."}</p>
+      </div>
+    </div>
+  </div>
+
+  ${pollCard({
+    key:"s0_pref",
+    title:"開場快投：本週三個判斷中，你目前最需要釐清哪一個？",
+    title_en:"Opening poll: which judgment do you most need to clarify this week?",
+    opts:[
+      ["a","CAGE：如何判斷哪一種距離最關鍵？","CAGE: How do we judge which distance matters most?"],
+      ["b","GVC：治理模式如何影響誰拿走價值？","GVC: How does governance affect who captures value?"],
+      ["c","NPV：如何把風險、碳價與折現率放進投資評估？","NPV: How do risk, carbon price, and discount rate enter investment evaluation?"],
+      ["d","整合：如何把三者寫成一份策略備忘錄？","Integration: How do we combine all three into a strategy memo?"]
+    ],
+    followup:[
+      "今天的重點不是背框架，而是把框架用在同一個跨國決策鏈條上。",
+      "如果答案分散，代表同一個投資案會同時卡在距離、治理與財務三種問題。"
+    ],
+    followup_en:[
+      "The goal is not to memorize frameworks, but to apply them to one cross-border decision chain.",
+      "If answers are dispersed, the same investment decision is constrained by distance, governance, and financial logic at once."
+    ]
+  })}
+  `;
+}
+
+
+// ════════════════════════════════════════════
+//  VIEW T — Part 1+2 INTEGRATED: Distance × Governance × Apparel
+// ════════════════════════════════════════════
+// ════════════════════════════════════════════
+//  VIEW T — Part 1+2 INTEGRATED: Distance × Governance × Apparel
+//  (28 min total) — Uniqlo / Zara / H&M as the integrating thread
+// ════════════════════════════════════════════
+function viewT(){
+  const zh=ST.lang==="zh";
+  const tch=IS_TEACHER;
+
+  // AI prompt for T-④ touchpoint (define separately to avoid template-literal escape issues)
+  const aiPrompt_T4_zh = "你扮演一位孟加拉成衣產業的供應鏈經濟學家，立場「現實派」：你認為單純譴責品牌沒用，要看治理結構。\n\n一位學生會貼一句他對「孟加拉 CMT 薪資與議價能力長期受壓抑」的解釋。\n\n你的任務：用繁體中文 3 句話、≤80 字，挑出他解釋裡的分析弱點，並提出更精確的治理術語。\n\n第一句指出弱點，第二句提出修正，第三句以反問結尾。";
+  const aiPrompt_T4_en = "You play a Bangladesh apparel supply chain economist, 'pragmatist' stance: condemning brands is useless, governance structure matters.\n\nA student will paste their explanation of 'why Bangladesh CMT wages and bargaining power remain structurally constrained'.\n\nTask: 3 sentences (Traditional Chinese, ≤80 chars), point out analytical weaknesses + propose better governance terms.\n\nFirst sentence: identify weakness. Second: propose fix. Third: end with rhetorical question.";
+  const aiPromptDisplay_T4 = (zh ? aiPrompt_T4_zh : aiPrompt_T4_en).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // helper: only show reveal blocks in teacher mode
+  const teacherOnly = (_html) => '';  /* student build: no teacher content */
+  // helper: in student mode, hide answers and show "think first" placeholder
+  const answerBlock = (_correct, _exp_zh, _exp_en) => `<div class="revealBox" style="background:#F3F4F6;border-left:4px solid #94A3B8;padding:10px;margin-top:8px;border-radius:6px;">
+         <p class="sm" style="margin:0;color:#475569;"><em>${zh?"💭 想想看再跟老師討論":"💭 Think first, then discuss with instructor"}</em></p>
+       </div>`;  /* student build: no teacher reference */
+
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"🧭 T｜跨國決策的距離與治理（成衣品牌實境課）":"🧭 T | Cross-Border Decisions: Distance × Governance (Apparel Lab)"}</h1>
+      <p class="sub">${zh?"以 Uniqlo · Zara · H&M 三家為整合主軸——同一品牌、不同產品線，採用<em>不同治理</em>。學會看『哪個產品該用哪種治理』，比死背理論更重要。":"Uniqlo · Zara · H&M as the integration thread — same brand, different product lines, <em>different governance</em>. Learning 'which mode for which product' beats memorizing the typology."}</p>
+    </div>
+    <div class="tag">28 min</div>
+  </div>
+  ${timeTags("t")}
+
+  <!-- ① 開場：半全球化數字遊戲（壓縮版 3 min）-->
+  <div class="card" style="border-left:5px solid var(--t1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t1);">${zh?"① ⚡ Ghemawat 數字快猜（3 min）":"① ⚡ Ghemawat Quick-Guess (3 min)"}</p>
+    <p class="p" style="font-size:14px;">${zh?"先憑直覺寫下你的猜測——四個跨國流動指標，全球佔比是多少？":"Guess first — what % of these flows are cross-border?"}</p>
+    <div class="grid2" style="margin-top:8px;">
+      <div class="card" style="padding:10px;"><strong>${zh?"跨國 FDI / 全球固定投資":"FDI / fixed investment"}</strong><div class="mono" style="font-size:14px;color:var(--muted);margin-top:4px;">${zh?"你的猜測：____ %":"Your guess: ____ %"}</div></div>
+      <div class="card" style="padding:10px;"><strong>${zh?"跨國電話 / 全部通話":"Cross-border phone calls"}</strong><div class="mono" style="font-size:14px;color:var(--muted);margin-top:4px;">${zh?"你的猜測：____ %":"Your guess: ____ %"}</div></div>
+      <div class="card" style="padding:10px;"><strong>${zh?"跨國移民 / 全球人口":"Cross-border migrants"}</strong><div class="mono" style="font-size:14px;color:var(--muted);margin-top:4px;">${zh?"你的猜測：____ %":"Your guess: ____ %"}</div></div>
+      <div class="card" style="padding:10px;"><strong>${zh?"跨國貿易 / 全球 GDP":"Trade / GDP"}</strong><div class="mono" style="font-size:14px;color:var(--muted);margin-top:4px;">${zh?"你的猜測：____ %":"Your guess: ____ %"}</div></div>
+    </div>
+    ${answerBlock(null,
+      ``,
+      ``
+    )}
+  </div>
+
+  <!-- ② 三家品牌的全球佈局 → 帶出 CAGE 距離（5 min）-->
+  <div class="card" style="border-left:5px solid var(--t1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t1);">${zh?"② 🌍 三家品牌的全球佈局＝CAGE 四距離的鏡子（5 min）":"② 🌍 Three Brands as a CAGE Mirror (5 min)"}</p>
+    <p class="p" style="font-size:14px;">${zh?"觀察 Zara、Uniqlo、H&M 在跨國時的<strong>不同選擇</strong>——這些選擇都在回應 Ghemawat 的<strong>四種距離</strong>：":"Observe how Zara, Uniqlo, H&M make <strong>different cross-border choices</strong> — each addresses Ghemawat's <strong>four distances</strong>:"}</p>
+
+    <table class="tbl" style="margin-top:8px;">
+      <thead><tr>
+        <th></th>
+        <th>🇪🇸 Zara</th>
+        <th>🇯🇵 Uniqlo</th>
+        <th>🇸🇪 H&M</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>🎭 Cultural</strong><br/><span class="sm">${zh?"消費品味":"Taste"}</span></td>
+          <td>${zh?"歐洲時尚為核心，亞洲店面在地化弱":"EU fashion core, weak Asia local"}</td>
+          <td>${zh?"日式極簡延伸，高在地化（HEATTECH 因地制宜）":"JP minimalism, high local adapt (HEATTECH variants)"}</td>
+          <td>${zh?"北歐簡約，全球同款行銷":"Nordic simple, global same-product"}</td></tr>
+        <tr><td><strong>⚖️ Admin</strong><br/><span class="sm">${zh?"關稅／法規":"Tariffs"}</span></td>
+          <td>${zh?"近岸／鄰近供應占比較高，法規與物流摩擦較低":"high share of nearshore/proximity sourcing, lower regulatory/logistics friction"}</td>
+          <td>${zh?"60% 中國 + 20% 越南，碳揭露／供應鏈盡責風險中":"60% CN + 20% VN, moderate carbon-disclosure / due-diligence risk"}</td>
+          <td>${zh?"60-70% 亞洲，高碳揭露／供應鏈盡責風險":"60-70% Asia, high carbon-disclosure / due-diligence risk"}</td></tr>
+        <tr><td><strong>🌐 Geographic</strong><br/><span class="sm">${zh?"物流速度":"Speed"}</span></td>
+          <td>${zh?"歐洲倉 → 全球 2-3 週":"EU hub → 2-3 weeks global"}</td>
+          <td>${zh?"亞洲就近，6-12 月開發":"Asia-near, 6-12 month dev"}</td>
+          <td>${zh?"亞洲 → 全球 2-3 月":"Asia → 2-3 months global"}</td></tr>
+        <tr><td><strong>💹 Economic</strong><br/><span class="sm">${zh?"成本套利":"Cost arbitrage"}</span></td>
+          <td>${zh?"高人力成本，靠速度補":"High wage, paid by speed"}</td>
+          <td>${zh?"中等套利 + IP 加值":"Medium arb + IP premium"}</td>
+          <td>${zh?"極致低成本套利":"Extreme cost arbitrage"}</td></tr>
+      </tbody>
+    </table>
+
+    ${tch ? `` : ''}
+
+    <!-- AAA + ADDING 一次過 -->
+    <p class="p" style="font-size:14px;margin-top:12px;"><strong>${zh?"📐 三家對應的 AAA 策略姿勢：":"📐 AAA Posture by Brand:"}</strong></p>
+    <div class="grid3" style="margin-top:6px;">
+      <div class="card" style="padding:10px;border-top:4px solid #1E40AF;">
+        <p class="cardTitle" style="font-size:14px;color:#1E40AF;">Zara: <strong>Adaptation+Aggregation</strong></p>
+        <p class="sm">${zh?"以歐洲為平台聚合 + 各國時尚速回應。ADDING 主打 D（Differentiating）+ A（Adding volume in fashion-hungry markets）。":"EU platform aggregation + fast local adaptation. ADDING: D (Differentiate) + A (Adding fashion-hungry volume)."}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid #92400E;">
+        <p class="cardTitle" style="font-size:14px;color:#92400E;">Uniqlo: <strong>Aggregation+Adaptation</strong></p>
+        <p class="sm">${zh?"全球技術平台（HEATTECH）+ 各國微調。ADDING 主打 G（Generating Knowledge）+ D（Differentiating tech）。":"Global tech platform (HEATTECH) + local tweaks. ADDING: G (Generating knowledge) + D (tech differentiation)."}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid #991B1B;">
+        <p class="cardTitle" style="font-size:14px;color:#991B1B;">H&M: <strong>Arbitrage</strong></p>
+        <p class="sm">${zh?"極致低成本，利用跨國採購的成本差異。ADDING 主打 D（Decreasing costs）+ N（Normalizing risk via diversification）。":"Extreme cost arbitrage through cross-border sourcing cost differences. ADDING: D (Decreasing costs) + N (Normalizing risk via diversification)."}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ②.5 三方對照（從 v5_4 保留）-->
+  <div class="card" style="border-left:5px solid var(--t2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t2);">${zh?"②⁺ 三方對照：Zara vs. H&amp;M vs. Uniqlo — 同一個產業，三種治理邏輯":"②⁺ Three-Way Matrix: Zara vs. H&amp;M vs. Uniqlo — Same industry, three governance logics"}</p>
+    <p class="p" style="font-size:14px;">${zh?"在進入「同品牌不同產品線」之前，先比較這三家在<strong>整體層級</strong>的治理選擇。同樣是成衣品牌，三家的<em>價值來源完全不同</em>。":"Before going into 'same brand, different product lines', compare the three at the <strong>firm level</strong>. Same apparel industry, but three <em>very different value sources</em>."}</p>
+    <div style="overflow-x:auto;margin-top:10px;">
+      <table class="tbl" style="min-width:720px;">
+        <thead>
+          <tr>
+            <th style="width:150px;text-align:left;">${zh?"面向 Dimension":"Dimension"}</th>
+            <th style="background:#DBEAFE;color:#1E40AF;">${zh?"🇪🇸 Zara (Inditex)":"🇪🇸 Zara (Inditex)"}</th>
+            <th style="background:#FEE2E2;color:#991B1B;">${zh?"🇸🇪 H&amp;M":"🇸🇪 H&amp;M"}</th>
+            <th style="background:#FEF3C7;color:#92400E;">${zh?"🇯🇵 Uniqlo":"🇯🇵 Uniqlo"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>${zh?"商模定位":"Business model"}</strong></td>
+            <td>${zh?"快時尚 × 時髦":"Fast-fashion × trendy"}</td>
+            <td>${zh?"快時尚 × 平價":"Fast-fashion × affordable"}</td>
+            <td>${zh?"基本款 × 科技機能":"Basics × functional tech"}</td></tr>
+          <tr><td><strong>${zh?"SKU / 年":"SKUs / year"}</strong></td>
+            <td>${zh?"<strong>~12,000</strong>（最多）":"<strong>~12,000</strong> (most)"}</td>
+            <td>${zh?"~3,000-5,000":"~3,000-5,000"}</td>
+            <td>${zh?"<strong>~1,000</strong>（最少）":"<strong>~1,000</strong> (fewest)"}</td></tr>
+          <tr><td><strong>${zh?"設計→上架":"Design→shelf"}</strong></td>
+            <td>${zh?"<strong>2-3 週</strong>":"<strong>2-3 weeks</strong>"}</td>
+            <td>${zh?"~2-3 個月":"~2-3 months"}</td>
+            <td>${zh?"~6-12 個月":"~6-12 months"}</td></tr>
+          <tr><td><strong>${zh?"主治理模式":"Primary governance"}</strong></td>
+            <td>${zh?"<strong>Hierarchy + Relational</strong>":"<strong>Hierarchy + Relational</strong>"}</td>
+            <td>${zh?"<strong>Modular + Captive</strong>":"<strong>Modular + Captive</strong>"}</td>
+            <td>${zh?"<strong>Relational + Modular</strong>":"<strong>Relational + Modular</strong>"}</td></tr>
+          <tr><td><strong>${zh?"生產地理":"Production"}</strong></td>
+            <td>${zh?"~50% 近岸／鄰近供應（西/葡/摩洛哥／土耳其等）；~50% 亞洲":"~50% nearshore/proximity sourcing (ES/PT/MA/TR etc.); ~50% Asia"}</td>
+            <td>${zh?"~60-70% 亞洲外部供應；自有製造極少":"~60-70% external Asia sourcing; minimal own manufacturing"}</td>
+            <td>${zh?"~60% 中國 + ~20% 越南／孟加拉":"~60% CN + ~20% VN/BD"}</td></tr>
+          <tr><td><strong>${zh?"供應商網絡":"Supplier network"}</strong></td>
+            <td>${zh?"廣泛、多層次":"Broad, multi-tiered"}</td>
+            <td>${zh?"中度集中":"Moderately concentrated"}</td>
+            <td>${zh?"核心夥伴較集中":"Concentrated core partners"}</td></tr>
+          <tr><td><strong>${zh?"減價促銷比例":"Markdown rate"}</strong></td>
+            <td>${zh?"<strong>~15%（極低）</strong>":"<strong>~15% (very low)</strong>"}</td>
+            <td>${zh?"~40-50%":"~40-50%"}</td>
+            <td>${zh?"~20-30%":"~20-30%"}</td></tr>
+          <tr><td><strong>${zh?"近年毛利率":"Gross margin"}</strong></td>
+            <td>${zh?"~58-59%":"~58-59%"}</td>
+            <td>${zh?"~51-53%":"~51-53%"}</td>
+            <td>${zh?"~49-51%":"~49-51%"}</td></tr>
+          <tr><td><strong>${zh?"AAA 對應":"AAA fit"}</strong></td>
+            <td>${zh?"<strong>Aggregation</strong>（歐洲時尚平台）":"<strong>Aggregation</strong> (EU fashion platform)"}</td>
+            <td>${zh?"<strong>Arbitrage</strong>（全球低成本勞工）":"<strong>Arbitrage</strong> (global low-cost labor)"}</td>
+            <td>${zh?"<strong>Aggregation + Adaptation</strong>":"<strong>Aggregation + Adaptation</strong>"}</td></tr>
+          <tr><td><strong>${zh?"核心 intangible":"Core intangible"}</strong></td>
+            <td>${zh?"速度 + 物流整合":"Speed + integrated logistics"}</td>
+            <td>${zh?"全球品牌 + 通路規模":"Global brand + retail footprint"}</td>
+            <td>${zh?"機能材料 IP（HEATTECH 等）":"Functional-material IP (HEATTECH, etc.)"}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:#FAFAFA;padding:12px;border-radius:8px;">
+      <p class="cardTitle" style="color:var(--t2);">${zh?"🔍 批判題 0：三家毛利率差距其實不大（49-59%），為什麼長期競爭力差很大？":"🔍 Critique 0: Gross margins are similar (49-59%) — why do long-run trajectories differ so much?"}</p>
+      <p class="sm">${zh?"提示：從 markdown rate、SKU 複雜度、intangible asset 三個面向想。":"Hint: think markdown rate, SKU complexity, intangible asset."}</p>
+      ${answerBlock(null,
+        ``,
+        ``
+      )}
+    </div>
+  </div>
+
+  <!-- ③ 整合核心：同品牌 × 不同產品線 = 不同治理（10 min）-->
+  <div class="card" style="border-left:5px solid var(--t2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t2);">${zh?"③ 🎯 整合核心：同品牌不同產品線＝不同治理（10 min）":"③ 🎯 Core Insight: Same Brand, Different Product Lines, Different Governance (10 min)"}</p>
+    <p class="p" style="font-size:14px;">${zh?"教科書常說『Zara 是 Hierarchy / H&M 是 Modular』——這太粗。<strong>真實狀況是：同一品牌的不同產品線採用不同治理</strong>。Gereffi 五模式是<em>產品級</em>決策，不是公司級。":"Textbooks say 'Zara=Hierarchy, H&M=Modular' — too coarse. <strong>Reality: same brand, different product lines, different governance</strong>. Gereffi's 5 modes are <em>product-level</em>, not firm-level."}</p>
+
+    <table class="tbl" style="margin-top:10px;">
+      <thead><tr>
+        <th></th>
+        <th>${zh?"🇯🇵 Uniqlo":"🇯🇵 Uniqlo"}</th>
+        <th>${zh?"🇪🇸 Zara":"🇪🇸 Zara"}</th>
+        <th>${zh?"🇸🇪 H&M":"🇸🇪 H&M"}</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>${zh?"明星科技品":"Star tech product"}</strong></td>
+          <td><span class="badge" style="background:#E8F5EC;color:#14532D;">${zh?"🤝 Relational":"🤝 Relational"}</span><br/><span class="sm">HEATTECH × Toray 30 年合作研發</span></td>
+          <td><span class="badge" style="background:#EFE8F9;color:#5B21B6;">${zh?"🏢 Hierarchy":"🏢 Hierarchy"}</span><br/><span class="sm">${zh?"歐洲自有廠專做時尚款":"EU own factory for trendy"}</span></td>
+          <td><span class="badge" style="background:#E6EDF7;color:#1E40AF;">${zh?"🤝 Relational":"🤝 Relational"}</span><br/><span class="sm">${zh?"與少數設計師聯名":"Designer collabs"}</span></td></tr>
+        <tr><td><strong>${zh?"基本款":"Basic items"}</strong></td>
+          <td><span class="badge" style="background:#FEF3C7;color:#92400E;">${zh?"📐 Modular":"📐 Modular"}</span><br/><span class="sm">${zh?"中國 + 越南可換代工廠":"CN+VN swappable suppliers"}</span></td>
+          <td><span class="badge" style="background:#FEF3C7;color:#92400E;">${zh?"📐 Modular":"📐 Modular"}</span><br/><span class="sm">${zh?"亞洲代工，可換":"Asia OEM, swappable"}</span></td>
+          <td><span class="badge" style="background:#FEF3C7;color:#92400E;">${zh?"📐 Modular":"📐 Modular"}</span><br/><span class="sm">${zh?"中度集中的供應商池":"moderately concentrated supplier pool"}</span></td></tr>
+        <tr><td><strong>${zh?"極低價 CMT":"Lowest-cost CMT"}</strong></td>
+          <td><span class="badge" style="background:#FCEBEB;color:#991B1B;">${zh?"🔒 Captive":"🔒 Captive"}</span><br/><span class="sm">${zh?"孟加拉小廠":"Bangladesh small factories"}</span></td>
+          <td><span class="badge" style="background:#FCEBEB;color:#991B1B;">${zh?"🔒 Captive":"🔒 Captive"}</span><br/><span class="sm">${zh?"少量低價線（非主力）":"Limited low-price line"}</span></td>
+          <td><span class="badge" style="background:#FCEBEB;color:#991B1B;">${zh?"🔒 Captive":"🔒 Captive"}</span><br/><span class="sm">${zh?"孟加拉、緬甸大量採購":"BD+MM massive sourcing"}</span></td></tr>
+        <tr><td><strong>${zh?"原料":"Raw materials"}</strong></td>
+          <td><span class="badge" style="background:#F3F4F6;color:#475569;">${zh?"💱 Market":"💱 Market"}</span><br/><span class="sm">${zh?"棉花期貨":"Cotton futures"}</span></td>
+          <td><span class="badge" style="background:#F3F4F6;color:#475569;">${zh?"💱 Market":"💱 Market"}</span><br/><span class="sm">${zh?"棉、聚酯期貨":"Cotton/polyester futures"}</span></td>
+          <td><span class="badge" style="background:#F3F4F6;color:#475569;">${zh?"💱 Market":"💱 Market"}</span><br/><span class="sm">${zh?"棉花期貨":"Cotton futures"}</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout" style="background:#FFF7E5;border-left:5px solid var(--gold);padding:10px;margin-top:10px;border-radius:6px;">
+      <p class="sm" style="margin:0;">${zh?"<strong>💡 學生最常誤用的地方：</strong>把『品牌 = 一種治理』當成事實。實情是<em>產品線決定治理</em>。下面的批判題就是練習這個。":"<strong>💡 Common student mistake:</strong> treating 'brand = one governance'. Reality: <em>product line dictates governance</em>. Critical-thinking exercise next."}</p>
+    </div>
+
+    <!-- 批判型互動 1：找錯題 -->
+    <div class="card" style="margin-top:14px;background:#FAFAFA;padding:12px;border-radius:8px;">
+      <p class="cardTitle" style="color:var(--t2);">${zh?"🔍 批判題 1：這段 AI 分析哪裡錯？":"🔍 Critique 1: What's wrong with this AI analysis?"}</p>
+      <div class="callout" style="background:#FFFFFF;border-left:4px solid #94A3B8;padding:12px;margin-top:8px;border-radius:6px;font-size:13.5px;line-height:1.7;">
+        <p style="margin:0;font-style:italic;color:#334155;">${zh?'「Zara 是垂直整合的代表企業，因此它的所有產品線都採用 Hierarchy 治理。它的競爭優勢是擁有自己的供應鏈。相對地，H&M 因為是 Modular 治理，所以毛利低、無法快速反應市場。Uniqlo 介於兩者之間。」':'"Zara is vertically integrated, so all its product lines use Hierarchy governance. Its competitive edge is owning the supply chain. Conversely, H&M uses Modular governance, hence its low margin and slow market response. Uniqlo sits between."'}</p>
+        <p style="margin:8px 0 0 0;font-size:11.5px;color:#94A3B8;">— ${zh?"AI 生成於某次 ChatGPT 對話":"AI-generated from a ChatGPT session"}</p>
+      </div>
+      <p class="sm" style="margin-top:10px;"><strong>${zh?"請找出至少 3 個錯誤或誤導之處：":"Identify at least 3 errors or misleading claims:"}</strong></p>
+      ${answerBlock(null,
+        ``,
+        ``
+      )}
+    </div>
+
+    <!-- 批判型互動 2：判斷哪個說法更具說服力 -->
+    <div class="card" style="margin-top:14px;background:#FAFAFA;padding:12px;border-radius:8px;">
+      <p class="cardTitle" style="color:var(--t2);">${zh?"⚖️ 批判題 2：兩位顧問的建議，哪個比較有說服力？":"⚖️ Critique 2: Which consultant's advice is more persuasive?"}</p>
+      <p class="sm">${zh?"Uniqlo 想推一個新的「環保再生纖維基本 T」產品線。兩位顧問給出不同建議：":"Uniqlo wants to launch a new 'eco-recycled basic T' line. Two consultants disagree:"}</p>
+
+      <div class="grid2" style="margin-top:8px;">
+        <div class="card" style="padding:10px;border-top:4px solid #1E40AF;">
+          <p class="cardTitle" style="font-size:13px;color:#1E40AF;">${zh?"顧問 A":"Consultant A"}</p>
+          <p class="sm">${zh?"「這是基本款，應該用 <strong>Modular</strong>。從中國、越南供應商池中找有再生認證的工廠，可隨時換廠。」":"\"It's a basic item — use <strong>Modular</strong>. Source from CN/VN pool with recycled-cert factories, swap freely.\""}</p>
+        </div>
+        <div class="card" style="padding:10px;border-top:4px solid #14532D;">
+          <p class="cardTitle" style="font-size:13px;color:#14532D;">${zh?"顧問 B":"Consultant B"}</p>
+          <p class="sm">${zh?"「再生纖維有技術整合難度（纖維強度、染色穩定性），應該用 <strong>Relational</strong>，跟 1-2 家技術夥伴深度合作。」":"\"Recycled fiber has technical integration challenges (strength, dye stability) — use <strong>Relational</strong>, work deeply with 1-2 tech partners.\""}</p>
+        </div>
+      </div>
+
+      ${answerBlock(null,
+        ``,
+        ``
+      )}
+    </div>
+  </div>
+
+  <!-- ④ V ≠ A：誰拿走價值（5 min）-->
+  <div class="card" style="border-left:5px solid var(--t2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t2);">${zh?"④ 💰 V ≠ A：價值創造 ≠ 價值分配（5 min）":"④ 💰 V ≠ A: Value Created ≠ Value Captured (5 min)"}</p>
+    <p class="p" style="font-size:14px;">${zh?"一件 Uniqlo $30 T-shirt 的『派』長這樣：":"A Uniqlo $30 T-shirt's 'pie' looks like this:"}</p>
+
+    <div class="mono" style="background:#FAFAFA;padding:12px;border-radius:6px;font-size:12px;line-height:1.7;margin-top:8px;">
+${zh?"節點 ────────────── 創造價值 V ── 拿走價值 A":"Node ───────────────── V created ── A captured"}<br/>
+${zh?"棉花種植 ──────────  ~10%       ~3%   🔻":"Cotton farming ─────  ~10%       ~3%   🔻"}<br/>
+${zh?"紗線／布料 ────────  ~15%       ~8%":"Yarn / fabric ──────  ~15%       ~8%"}<br/>
+${zh?"CMT 縫製 ──────────  ~10%       ~3%   🔻 ★":"CMT sewing ─────────  ~10%       ~3%   🔻 ★"}<br/>
+${zh?"物流 ──────────────  ~10%      ~10%":"Logistics ──────────  ~10%      ~10%"}<br/>
+${zh?"零售／品牌 ────────  ~55%      ~60%   ⭐":"Retail / brand ─────  ~55%      ~60%   ⭐"}<br/>
+${zh?"消費者剩餘 ─────────   —        ~15%":"Consumer surplus ───   —        ~15%"}<br/>
+${zh?"────────────────────────────────────────":"────────────────────────────────────────"}<br/>
+${zh?"V 散佈在整條鏈上，A 集中在兩個節點 ⭐":"V spreads, A concentrates at 2 nodes ⭐"}
+    </div>
+
+    <p class="p" style="font-size:14px;margin-top:10px;">${zh?"<strong>關鍵問題：</strong>為什麼 CMT 工人創造 ~10% 價值卻只拿 ~3%？":"<strong>Key Q:</strong> Why does CMT create ~10% V but capture only ~3% A?"}</p>
+
+    <!-- 批判型互動 3：AI 工人權益分析的批判 -->
+    <div class="card" style="margin-top:14px;background:#FAFAFA;padding:12px;border-radius:8px;">
+      <p class="cardTitle" style="color:var(--t2);">${zh?"🎯 AI 互動觸點 1：『品牌剝削論』vs.『治理結構論』（5 min）":"🎯 AI Touchpoint 1: 'Brand Exploitation' vs 'Governance Structure' (5 min)"}</p>
+      <p class="p" style="font-size:14px;">${zh?"許多媒體說「Uniqlo / Zara 剝削孟加拉工人」。但<strong>『剝削』是道德判斷，不是分析框架</strong>。讓 AI 紅隊你的觀點，看你是否真的能用治理結構而非道德譴責來解釋。":"Many media say \"Uniqlo/Zara exploits Bangladesh workers\". But <strong>'exploitation' is a moral verdict, not an analytical frame</strong>. Let AI red-team your view to see if you can use governance structure rather than moral outrage."}</p>
+
+      <div class="callout" style="background:#FFF7E5;border-left:5px solid var(--gold);padding:12px;margin-top:8px;border-radius:6px;">
+        <p class="sm"><strong>${zh?"📱 操作步驟：":"📱 Steps:"}</strong></p>
+        <ol class="sm" style="margin:6px 0 0 0;padding-left:24px;">
+          <li>${zh?"在筆記寫下 1 句你對「為什麼孟加拉成衣工人的薪資與議價能力長期受壓抑」的解釋（必須用治理術語，不能用「貪心」「剝削」這類詞）":"Write 1 sentence explaining why Bangladeshi garment workers' wages and bargaining power remain structurally constrained (use governance terms, not 'greed' or 'exploitation')"}</li>
+          <li>${zh?"打開 Claude，貼上下列 prompt：":"Open Claude, paste the prompt below:"}</li>
+        </ol>
+      </div>
+
+      <div class="card" style="background:#FFFFFF;padding:10px;margin-top:8px;border:1px dashed #94A3B8;border-radius:6px;font-size:12px;">
+        <p style="margin:0;font-family:var(--mono);white-space:pre-wrap;">${aiPromptDisplay_T4}</p>
+      </div>
+
+      <p class="sm" style="margin-top:10px;">${zh?"<strong>你要帶回筆記的東西：</strong>(1) AI 指出的弱點 (2) 你修正後的版本 (3) 你跟 AI 哪裡不同意？":"<strong>Bring back to notes:</strong> (1) AI's critique (2) your revised version (3) where you disagree with AI"}</p>
+    </div>
+  </div>
+
+  <!-- ⑤ 升級階梯 + 收尾 quiz（4 min）-->
+  <div class="card" style="border-left:5px solid var(--t2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t2);">${zh?"⑤ 🪜 升級階梯 + 反思題（4 min）":"⑤ 🪜 Upgrading Ladder + Reflection (4 min)"}</p>
+
+    <div class="mono" style="background:#FAFAFA;padding:12px;border-radius:6px;font-size:12px;line-height:1.7;">
+${zh?"           ┌───── OBM (own brand)  ⭐ A 25-40%":"           ┌───── OBM (own brand)  ⭐ A 25-40%"}<br/>
+${zh?"           │       e.g. LC Waikiki (土耳其升級成功例)":"           │       e.g. LC Waikiki (Turkey)"}<br/>
+${zh?"           │":"           │"}<br/>
+${zh?"           ├───── ODM (own design+sourcing) A 8-15%":"           ├───── ODM (own design+source) A 8-15%"}<br/>
+${zh?"           │       e.g. 越南、印度部分大廠":"           │       e.g. some VN, IN large mfg"}<br/>
+${zh?"           │":"           │"}<br/>
+${zh?"           └───── CMT (sewing only)         A 2-5% 🔻":"           └───── CMT (sewing only)         A 2-5% 🔻"}<br/>
+${zh?"                   e.g. 孟加拉（長期卡在低附加價值環節）":"                   e.g. Bangladesh (long-term low-value lock-in)"}<br/>
+${zh?"":""}<br/>
+${zh?"爬升條件：政府政策 + 品牌技術轉移 + 在地金融":"Climb requires: gov policy + tech transfer + local finance"}
+    </div>
+
+    <!-- 批判型互動 4：跨案例比較 -->
+    <div class="card" style="margin-top:14px;background:#FAFAFA;padding:12px;border-radius:8px;">
+      <p class="cardTitle" style="color:var(--t2);">${zh?"🔍 批判題 3：兩個解釋哪個更精確？":"🔍 Critique 3: Which explanation is more precise?"}</p>
+      <p class="sm">${zh?"為什麼越南、土耳其 CMT 廠能升級到 ODM／OBM，孟加拉卻不行？":"Why have VN/TR CMT factories upgraded to ODM/OBM, but BD has not?"}</p>
+
+      <div class="grid2" style="margin-top:8px;">
+        <div class="card" style="padding:10px;">
+          <p class="cardTitle" style="font-size:13px;">${zh?"解釋 X（流行說法）":"Explanation X (popular)"}</p>
+          <p class="sm">${zh?"「孟加拉勞工教育水平低、政府腐敗，所以爬不上去。」":"\"BD workers are less educated, government corrupt — that's why.\""}</p>
+        </div>
+        <div class="card" style="padding:10px;">
+          <p class="cardTitle" style="font-size:13px;">${zh?"解釋 Y（治理結構派）":"Explanation Y (structural)"}</p>
+          <p class="sm">${zh?"「孟加拉的 Captive 治理鎖死了升級路徑：品牌不願轉移技術（會培養出新對手）、本地缺投資資本、產業升級政策與基礎建設不足。」":"\"BD's Captive governance locks the upgrade path: brands won't transfer tech (creates competitors), local capital scarce, no FTA leverage.\""}</p>
+        </div>
+      </div>
+
+      ${answerBlock(null,
+        ``,
+        ``
+      )}
+    </div>
+  </div>
+
+  <!-- ⑥ 過場到 Part 3 -->
+  <div class="callout" style="background:#FFF7E5;border-left:5px solid var(--gold);padding:12px;border-radius:6px;">
+    <p class="p" style="font-size:14px;margin:0;"><strong>${zh?"🎬 過場到 Part 3 (Michelin)：":"🎬 Bridge to Part 3 (Michelin):"}</strong>${zh?"成衣業告訴我們<em>不同產品線採用不同治理</em>。Michelin 案例則展示<em>同一公司在跨國擴張時，怎麼<strong>選擇</strong>把哪個治理留在哪裡</em>。Part 3 我們親手用 NPV 量化這個治理選擇。":"Apparel showed us <em>different products use different governance</em>. Michelin shows us how <em>one company <strong>chooses</strong> where to locate which governance</em> when expanding cross-border. Part 3: we'll quantify this with NPV."}</p>
+  </div>
+
+  `;
+}
+
+// ════════════════════════════════════════════
+//  VIEW C1 — Michelin Case Setup (Project Gemini)
+// ════════════════════════════════════════════
+function viewC1(){
+  const zh=ST.lang==="zh";
+
+  // ─── 三地對照表資料（用於互動猜測與揭示） ───
+  // dims: customer proximity / labor cost advantage / admin & IP / transport carbon / strategic flexibility
+  const locs = [
+    {k:"ks", flag:"🇺🇸", zh:"Kansas 美中西部", en:"Kansas (US Midwest)"},
+    {k:"vn", flag:"🇻🇳", zh:"Vietnam 越南", en:"Vietnam"},
+    {k:"pl", flag:"🇵🇱", zh:"Poland 波蘭", en:"Poland"}
+  ];
+  const dims = [
+    {k:"cust", icon:"📍", zh:"客戶近距離 (John Deere)", en:"Customer proximity (John Deere)",
+      ans:{ks:"H", vn:"L", pl:"M"},
+      note:{
+        ks:{zh:"John Deere 愛荷華總部 + 美中西部總裝廠 → JIT 交期 <48h", en:"John Deere Iowa HQ + Midwest assembly → JIT lead time <48h"},
+        vn:{zh:"跨太平洋海運 3-4 週；完全失去近距離合作優勢", en:"Trans-Pacific 3-4 wk shipping; loses proximity advantage"},
+        pl:{zh:"離 John Deere 歐洲總裝廠較近，但非主市場", en:"Closer to John Deere's European assembly, but not core mkt"}
+      }},
+    {k:"labor", icon:"💰", zh:"勞動力成本優勢", en:"Labor cost advantage",
+      ans:{ks:"L", vn:"H", pl:"M"},
+      note:{
+        ks:{zh:"熟工 ~$25-30/hr；無成本套利空間", en:"Skilled labor ~$25-30/hr; no arbitrage"},
+        vn:{zh:"~$3-5/hr；但橡膠履帶需要高訓練，學習曲線長", en:"~$3-5/hr; but rubber tracks need trained labor — steep curve"},
+        pl:{zh:"~$8-12/hr；歐洲要求的品質更高", en:"~$8-12/hr; European quality demands higher"}
+      }},
+    {k:"admin", icon:"⚖️", zh:"行政／關稅／智財風險", en:"Admin / tariff / IP risk",
+      ans:{ks:"L", vn:"M", pl:"L"},
+      note:{
+        ks:{zh:"本國生產、無關稅；智財保護最強", en:"Domestic; zero tariff; strongest IP"},
+        vn:{zh:"RCEP 紅利但 US 301 條款風險；智財執法弱", en:"RCEP benefits but US Section 301 exposure; weak IP enforcement"},
+        pl:{zh:"EU FTA 順暢，智財保護佳；但對美出口要再轉運", en:"Smooth EU FTA &amp; strong IP; but re-ship to US adds cost"}
+      }},
+    {k:"carbon", icon:"🌱", zh:"運輸碳足跡", en:"Transport carbon footprint",
+      ans:{ks:"L", vn:"H", pl:"M"},
+      note:{
+        ks:{zh:"卡車到 John Deere 總裝廠 <1000km；碳排最低", en:"Truck to John Deere assembly &lt;1000km; lowest"},
+        vn:{zh:"越南→美中西部海運＋陸運，碳排是 Kansas 的 ~15-20 倍", en:"Vietnam→US Midwest ocean+rail, ~15-20× Kansas emissions"},
+        pl:{zh:"跨大西洋海運，約 Kansas 的 8-10 倍", en:"Trans-Atlantic shipping, ~8-10× Kansas"}
+      }},
+    {k:"flex", icon:"🎯", zh:"戰略彈性／啟動速度", en:"Strategic flex / speed to market",
+      ans:{ks:"H", vn:"L", pl:"M"},
+      note:{
+        ks:{zh:"Camso 既有廠區擴建，18 個月就能啟動", en:"Expand on Camso existing site; ~18 mo to start"},
+        vn:{zh:"新綠地廠，建置 30+ 月；熟工訓練要另加 1 年", en:"Greenfield; 30+ mo to build; +1 yr for labor training"},
+        pl:{zh:"Michelin 歐洲既有廠可改造，但產線需重設計", en:"Can convert Michelin's European plant but needs line redesign"}
+      }}
+  ];
+
+  // Cell state helper
+  const cellKey = (loc,dim) => `${loc}_${dim}`;
+  const getCell = (loc,dim) => (ST.c1Guess && ST.c1Guess[cellKey(loc,dim)]) || "?";
+  const cellColor = v => v==="H"?"high":(v==="M"?"mid":(v==="L"?"low":"qm"));
+
+  // ─── 關鍵參數地圖資料 ───
+  const params = [
+    {k:"capex", icon:"🏭", zh_t:"Capex 100M", en_t:"Capex $100M",
+      zh_why:"分 2 年（Y1 $65M + Y2 $35M），匹配建廠節奏",
+      en_why:"Split Y1 $65M + Y2 $35M, matching construction timeline",
+      zh_what_if:"若一次性投入，NPV ~ 下降 $3-4M（前置損失擴大）",
+      en_what_if:"If all upfront, NPV drops ~$3-4M (larger front-loaded loss)"},
+    {k:"price", icon:"💵", zh_t:"OE $8k / RT $6k",  en_t:"OE $8k / RT $6k",
+      zh_why:"雙軌定價：OE 量大穩定、RT 換品利潤厚；通膨上調",
+      en_why:"Dual-track: OE stable volume, RT fat margin on replacement; inflation-adjusted",
+      zh_what_if:"若 OE 降 10%，NPV 下降 ~$8-10M（最敏感的營收參數）",
+      en_what_if:"If OE price −10%, NPV −$8-10M (most sensitive revenue param)"},
+    {k:"wacc", icon:"📉", zh_t:"WACC 7.75%", en_t:"WACC 7.75%",
+      zh_why:"用農業分部資產 β（0.83），因履帶與農民現金流同步",
+      en_why:"Uses ag-segment asset β (0.83); tracks co-move with farmer cash flow",
+      zh_what_if:"改用集團 β（β=1.34，r=10.3%），NPV 幾乎腰斬",
+      en_what_if:"Switch to group β (β=1.34, r=10.3%) → NPV nearly halved"},
+    {k:"tax",  icon:"🏛️", zh_t:"稅率 25%", en_t:"Tax 25%",
+      zh_why:"美國聯邦 21% + 堪薩斯州約 4%（案例假設）",
+      en_why:"US federal 21% + Kansas state ~4% (case assumption)",
+      zh_what_if:"若建在加州（~30% 稅）NPV 下降 ~$5M",
+      en_what_if:"If built in CA (~30% tax), NPV −$5M"},
+    {k:"horizon", icon:"⏱️", zh_t:"Horizon Y1-Y10",  en_t:"Horizon Y1-Y10",
+      zh_why:"TN 教學簡化：無 terminal value、殘值 $15M + NWC 回收",
+      en_why:"TN teaching simplification: no terminal value, $15M salvage + NWC recovery",
+      zh_what_if:"若含 5% 永續成長 terminal value，NPV 增加 ~$20-30M",
+      en_what_if:"Adding 5% perpetual growth terminal: NPV +$20-30M"},
+    {k:"carbon", icon:"🌱", zh_t:"Carbon $114/t", en_t:"Carbon $114/t",
+      zh_why:"Michelin 內部碳價假設；Kansas 無類似歐盟 ETS 的強制碳費",
+      en_why:"Michelin internal carbon-price assumption; Kansas has no EU-ETS-like mandatory carbon charge",
+      zh_what_if:"若碳價跳到 $300（高碳價／碳邊境壓力情境），NPV 下降 ~$4-7M",
+      en_what_if:"If carbon jumps to $300 (high-carbon-price / border-carbon-pressure scenario), NPV −$4-7M"}
+  ];
+
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"🏭 C1｜Part 3-A：Michelin 案例 — 為什麼在 Kansas 蓋廠？":"🏭 C1｜Part 3-A: Michelin Case — Why build in Kansas?"}</h1>
+      <p class="sub">${zh?"真實投資案 Project Gemini · 三地決策對照 · 關鍵財務參數地圖":"Real-world Project Gemini · Three-location decision matrix · Key parameter map"}</p>
+    </div>
+    <div class="tag">20 min</div>
+  </div>
+  ${timeTags("c1")}
+
+  <!-- ① Framing：從 Part 1-2 到 Part 3 -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"① 從質化到量化：把 Part 1-2 的洞察壓進試算表":"① Qualitative → Quantitative: compress Parts 1-2 into a spreadsheet"}</p>
+    <p class="p" style="font-size:14px;">${zh?"Part 1 用 CAGE／ADDING／AAA 問「<em>要不要跨</em>」；Part 2 用 GVC 治理問「<em>價值誰拿走</em>」；Part 3 把一個真實案子放上桌：<strong>Michelin Project Gemini — 在 Kansas 擴廠 US$100M</strong>，請你回答三個分量不同的具體問題。":"Part 1 used CAGE/ADDING/AAA to ask <em>whether to cross</em>; Part 2 used GVC governance to ask <em>who captures value</em>. Part 3 puts a real case on the table: <strong>Michelin Project Gemini — US$100M Kansas expansion</strong>, asking three concrete questions."}</p>
+    <div class="grid3" style="margin-top:10px;">
+      <div class="card" style="padding:10px;border-top:4px solid var(--c1);">
+        <p class="cardTitle" style="font-size:13px;">${zh?"Q1｜值不值得？":"Q1｜Worth it?"}</p>
+        <p class="sm">${zh?"純財務：NPV &gt; 0？對什麼折現率敏感？":"Pure finance: NPV &gt; 0? Sensitive to which discount rate?"}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--c2);">
+        <p class="cardTitle" style="font-size:13px;">${zh?"Q2｜碳會翻轉嗎？":"Q2｜Does carbon flip it?"}</p>
+        <p class="sm">${zh?"把 US$114/tCO₂ 加進來，結論會變嗎？":"Add $114/tCO₂ — does the verdict change?"}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t1);">
+        <p class="cardTitle" style="font-size:13px;">${zh?"Q3｜綠色升級值得嗎？":"Q3｜Green upgrade worth it?"}</p>
+        <p class="sm">${zh?"$9.6M 效率投資的財務回報量級？":"What's the NPV magnitude of the $9.6M efficiency capex?"}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 背景 briefing：縮成一張卡 -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"② 背景 Briefing：Michelin、履帶與 Project Gemini":"② Background Briefing: Michelin, tracks and Project Gemini"}</p>
+    <div class="grid3" style="margin-top:8px;">
+      <div class="card" style="padding:12px;background:var(--surface);">
+        <p class="cardTitle" style="font-size:13px;">🧩 ${zh?"為什麼 Michelin 做履帶？":"Why is Michelin in tracks?"}</p>
+        <p class="sm">${zh?"2018 年以 <strong>US$1.45B</strong> 併購加拿大 <strong>Camso</strong>（原 Camoplast Solideal），從「輪胎公司」擴張到「移動解決方案」——集團 <em>\"Beyond Tires\"</em> 策略。":"2018: acquired Canadian <strong>Camso</strong> (formerly Camoplast Solideal) for <strong>US$1.45B</strong>. Extends from \"tire company\" to \"mobility solutions\" — group <em>\"Beyond Tires\"</em> strategy."}</p>
+        <p class="sm" style="margin-top:6px;">${zh?"<em>履帶 vs. 輪胎</em>：履帶接地面積大、壓力分散，用於農業曳引機（John Deere、Claas）與營建機械。":"<em>Tracks vs tires</em>: tracks spread load, used on ag tractors (John Deere, Claas) and construction equipment."}</p>
+      </div>
+      <div class="card" style="padding:12px;background:var(--surface);">
+        <p class="cardTitle" style="font-size:13px;">💼 ${zh?"雙軌商模 OE + RT":"Dual-track business OE + RT"}</p>
+        <p class="sm">${zh?"<span class=\"mono\">OE</span>（Original Equipment）$8,000／條：直接賣 John Deere 等主機廠，<em>量大、穩定、毛利薄</em>。":"<span class=\"mono\">OE</span> (Original Equipment) $8,000/track: sold to John Deere etc., <em>high volume, stable, thin margin</em>."}</p>
+        <p class="sm" style="margin-top:6px;">${zh?"<span class=\"mono\">RT</span>（Replacement Tracks）$6,000／條：農民磨損後換新，<em>單價低、頻率高、毛利厚</em>。":"<span class=\"mono\">RT</span> (Replacement) $6,000/track: farmer replacement, <em>lower price, higher frequency, fat margin</em>."}</p>
+      </div>
+      <div class="card" style="padding:12px;background:var(--surface);">
+        <p class="cardTitle" style="font-size:13px;">📐 ${zh?"Project Gemini 數字骨架":"Project Gemini Skeleton"}</p>
+        <p class="sm">${zh?"<strong>Capex</strong> US$100M（Y1 $65M + Y2 $35M）→ 年產能 40k→60k 條<br/><strong>Green upgrade</strong> US$9.6M（Y1 一次性，提升 10% 能效）<br/><strong>Horizon</strong> Y1-Y10 教學簡化":"<strong>Capex</strong> US$100M (Y1 $65M + Y2 $35M) → 40k→60k tracks/yr<br/><strong>Green upgrade</strong> US$9.6M (Y1 once, +10% energy efficiency)<br/><strong>Horizon</strong> Y1-Y10 teaching simplification"}</p>
+        <p class="sm" style="margin-top:6px;color:var(--muted);">${zh?"內部碳價 US$114/tCO₂ 自扣；稅率 25%；CAPM：2.35% + 0.83 × 6.5% ≈ 7.75%。":"Internal carbon $114/tCO₂; tax 25%; CAPM: 2.35% + 0.83 × 6.5% ≈ 7.75%."}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 三地決策對照（互動猜測） -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"③ 三地對照：為什麼是 Kansas，不是 Vietnam、也不是 Poland？":"③ Three-location matrix: Why Kansas, not Vietnam, not Poland?"}</p>
+    <p class="p" style="font-size:14px;">${zh?"假設 Michelin 當時手上有三個候選地。依你的直覺，每個格子點擊<em>循環選擇</em>：<span class=\"mono\" style=\"background:rgba(21,128,61,.15);\">H</span> 高 / <span class=\"mono\" style=\"background:rgba(217,119,6,.15);\">M</span> 中 / <span class=\"mono\" style=\"background:rgba(220,38,38,.15);\">L</span> 低 / <span class=\"mono\" style=\"background:rgba(148,163,184,.2);\">?</span> 未答。填完後跟老師討論你的判斷：":"Imagine Michelin had three candidates. Click each cell to cycle <span class=\"mono\" style=\"background:rgba(21,128,61,.15);\">H</span> / <span class=\"mono\" style=\"background:rgba(217,119,6,.15);\">M</span> / <span class=\"mono\" style=\"background:rgba(220,38,38,.15);\">L</span> / <span class=\"mono\" style=\"background:rgba(148,163,184,.2);\">?</span>. Fill in your intuition, then discuss with your instructor:"}</p>
+    <p class="sm" style="color:var(--muted);margin-top:4px;">※ ${zh?"方向說明：「客戶近距離」「勞動力成本優勢」「戰略彈性」中 <strong>H = 程度高 = 對 Michelin 有利</strong>；「行政/關稅/智財<em>風險</em>」與「運輸碳<em>足跡</em>」中 <strong>L = 低風險／低排放 = 有利</strong>，H = 高風險／高排放 = 不利。":"Direction note: for 'Customer proximity', 'Labor cost advantage', 'Strategic flex' — <strong>H = high = favorable for Michelin</strong>. For 'Admin/tariff/IP <em>risk</em>' and 'Transport carbon <em>footprint</em>' — <strong>L = low risk / low emissions = favorable</strong>; H = high risk / high emissions = unfavorable."}</p>
+
+    <div style="overflow-x:auto;margin-top:10px;">
+      <table class="tbl" style="min-width:640px;">
+        <thead><tr>
+          <th style="width:200px;">${zh?"維度 Dimension":"Dimension"}</th>
+          ${locs.map(l=>`<th style="text-align:center;">${l.flag} ${zh?l.zh:l.en}</th>`).join("")}
+        </tr></thead>
+        <tbody>
+          ${dims.map(d=>`<tr>
+            <td><strong>${d.icon} ${zh?d.zh:d.en}</strong></td>
+            ${locs.map(l=>{
+              const v=getCell(l.k,d.k);
+              const correct = false;
+              const wrong = false;
+              const hint = false ? `<div style="font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4;text-align:left;">${zh?d.note[l.k].zh:d.note[l.k].en}${v==="?"?"":` <span style="color:var(--ntu);font-weight:800;">【建議：${d.ans[l.k]}】</span>`}</div>` : "";
+              return `<td data-c1guess="${l.k}|${d.k}" style="cursor:pointer;text-align:center;padding:6px;${correct?"background:rgba(21,128,61,.14);":""}${wrong?"background:rgba(220,38,38,.08);":""}">
+                <div class="mono" style="display:inline-block;padding:4px 12px;font-size:16px;min-width:36px;background:${v==="H"?"rgba(21,128,61,.15)":v==="M"?"rgba(217,119,6,.15)":v==="L"?"rgba(220,38,38,.15)":"rgba(148,163,184,.2)"};color:${v==="H"?"#14532D":v==="M"?"#7C2D12":v==="L"?"#991B1B":"#475569"};">${v}</div>
+                ${hint}
+              </td>`;
+            }).join("")}
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gameBtnRow" style="margin-top:10px;">
+      <button class="gameBtn" id="c1GuessReset">${zh?"↺ 重填":"↺ Clear"}</button>
+      
+    </div>
+
+    ${ST.c1RevealKey ? `<div class="callout gold" style="margin-top:10px;">
+      <p class="p" style="font-size:13px;"><strong>${zh?"🧠 教學重點：":"🧠 Teaching points: "}</strong>${zh?"Kansas 在「勞動力成本」輸到 Vietnam 與 Poland，但在<strong>客戶近距離</strong>、<strong>戰略彈性</strong>、<strong>碳足跡</strong>都贏 2-3 個等級。這就是 <em>CAGE 反向運用</em>——Michelin 不是在<em>跨</em>距離，而是刻意<em>縮</em>距離換來速度與信任。":"Kansas loses on labor cost vs Vietnam &amp; Poland, but wins 2-3 levels on <strong>customer proximity</strong>, <strong>strategic flexibility</strong>, and <strong>carbon footprint</strong>. This is <em>CAGE in reverse</em> — Michelin isn't <em>crossing</em> distance, it's deliberately <em>shrinking</em> it in exchange for speed &amp; trust."}</p>
+      <p class="sm" style="margin-top:8px;"><strong>${zh?"與 Part 2 Zara 的呼應：":"Echoes Part 2 Zara: "}</strong>${zh?"兩者都拒絕 arbitrage，選擇 <em>proximity + integration</em>。這不是永遠正確，但在<strong>速度敏感</strong>與<strong>客戶關係密集</strong>的產業裡，這個邏輯連連打出穩定長期獲利。":"Both reject arbitrage, choose <em>proximity + integration</em>. Not universally right, but in <strong>speed-sensitive</strong> &amp; <strong>relationship-intensive</strong> industries, this playbook delivers stable long-run margins."}</p>
+    </div>` : `<p class="sm" style="color:var(--muted);margin-top:8px;">${zh?"👆 點格子輸入直覺，填完後與同學討論、等老師帶出答案。":"👆 Click cells to record your intuition, then compare with classmates."}</p>`}
+  </div>
+
+  <!-- ④ 關鍵財務參數地圖 -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"④ 關鍵財務參數地圖（六張卡）":"④ Key Financial Parameter Map (six cards)"}</p>
+    <p class="p" style="font-size:14px;">${zh?"C2 的互動試算會讓你<em>調</em>其中三個。進 C2 之前，先看每個參數的意義、為什麼定在這個數、若不同會怎樣。":"C2 lets you <em>adjust</em> three of these. Before entering C2, understand each parameter's meaning, why this value, and the 'what if'."}</p>
+    <div class="grid3" style="margin-top:10px;">
+      ${params.map(pm=>`<div class="card" style="padding:12px;">
+        <p class="cardTitle" style="font-size:14px;">${pm.icon} ${zh?pm.zh_t:pm.en_t}</p>
+        <p class="sm" style="margin-top:6px;"><strong>${zh?"為什麼這個數：":"Why this value: "}</strong>${zh?pm.zh_why:pm.en_why}</p>
+        <p class="sm" style="margin-top:6px;color:var(--muted);"><strong>${zh?"What-if：":"What if: "}</strong>${zh?pm.zh_what_if:pm.en_what_if}</p>
+      </div>`).join("")}
+    </div>
+    <div class="callout teal" style="margin-top:10px;">
+      <p class="p" style="font-size:13px;"><strong>${zh?"💡 C2 會讓你調這三個：":"💡 C2 will let you adjust these three: "}</strong>${zh?"<strong>WACC</strong>（滑桿 A）、<strong>碳價</strong>（滑桿 B）、<strong>綠色升級 on/off</strong>（開關 C）。其他參數固定——先把它們記住。":"<strong>WACC</strong> (slider A), <strong>carbon price</strong> (slider B), and <strong>green upgrade on/off</strong> (toggle C). Others fixed — remember them."}</p>
+    </div>
+  </div>
+
+  <!-- ⑤ 永續的雙面：碳成本 vs. 效率回收 -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"⑤ 永續的雙面：一個減分、一個加分":"⑤ Two Faces of Sustainability: one negative, one positive"}</p>
+    <p class="p" style="font-size:14px;">${zh?"Project Gemini 的永續議題不是單面的「成本」，而是兩股力量相互抵銷——進 C2 前先建立直覺：哪邊贏？":"Sustainability here is not one-way 'cost' — it's two opposing forces. Build your intuition before C2: which wins?"}</p>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="card" style="padding:14px;border-top:4px solid #991B1B;background:linear-gradient(180deg,rgba(220,38,38,.04),#fff);">
+        <p class="cardTitle" style="font-size:14px;color:#991B1B;">🔴 ${zh?"減分 (−)：新產線碳成本":"Negative (−): New line carbon cost"}</p>
+        <p class="sm" style="margin-top:6px;">${zh?"Y10 滿產：電力 10,850 MWh + 熱能 10,150 MWh → <strong>7,585 tCO₂/年</strong>。":"Y10 full ramp: 10,850 MWh elec + 10,150 MWh gas → <strong>7,585 tCO₂/yr</strong>."}</p>
+        <p class="sm" style="margin-top:4px;">${zh?"× Michelin 內部影子價 $114/t = <strong>~$865k/年</strong>。":"× Michelin shadow price $114/t = <strong>~$865k/yr</strong>."}</p>
+        <p class="sm" style="margin-top:6px;color:#7C2D12;"><strong>${zh?"10 年 NPV 影響：~−$3 to −$5M":"10-yr NPV impact: ~−$3 to −$5M"}</strong></p>
+      </div>
+      <div class="card" style="padding:14px;border-top:4px solid #14532D;background:linear-gradient(180deg,rgba(21,128,61,.05),#fff);">
+        <p class="cardTitle" style="font-size:14px;color:#14532D;">🟢 ${zh?"加分 (+)：綠色升級效率回收":"Positive (+): Green upgrade efficiency"}</p>
+        <p class="sm" style="margin-top:6px;">${zh?"$9.6M 一次性投入 → 既有 <strong>40,000 條／年</strong>產能的生產成本下降約 9.4%（永續節省）。":"$9.6M once → production cost on existing <strong>40,000 tracks/yr</strong> drops ~9.4% forever."}</p>
+        <p class="sm" style="margin-top:4px;">${zh?"也同步降低每條 CO₂ 排放（減少額外碳成本）。":"Also cuts per-unit CO₂ (reduces future carbon cost)."}</p>
+        <p class="sm" style="margin-top:6px;color:#14532D;"><strong>${zh?"10 年 NPV 影響：~+$3 to +$5M":"10-yr NPV impact: ~+$3 to +$5M"}</strong></p>
+      </div>
+    </div>
+    <div class="callout purple" style="margin-top:10px;">
+      <p class="p" style="font-size:13px;"><strong>${zh?"🤔 直覺預測：":"🤔 Intuition check: "}</strong>${zh?"兩者量級<em>差不多</em>（各 $3-5M）。這代表：<strong>永續不是道德問題，而是可量化的現金流問題</strong>——它既可以拖累 NPV，也可以救 NPV。重點是：<em>兩者能不能同時做</em>？答案是可以（Project Gemini 就是）。":"Both are ~$3-5M magnitude. Meaning: <strong>sustainability isn't moral, it's quantifiable cashflow</strong> — it can drag or lift NPV. Key question: <em>can both be done at once</em>? Answer: yes (Project Gemini does)."}</p>
+    </div>
+  </div>
+
+  <!-- ⑥ Gut poll：讀完背景後的直覺 -->
+  <div class="card" style="border-left:5px solid var(--c1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c1);">${zh?"⑥ 讀完背景，你的直覺？":"⑥ After the briefing — your gut call?"}</p>
+    <p class="sm">${zh?"讀過三地對照與參數地圖後，投票——C2 的試算結果會來跟你的直覺對照。":"After the three-location matrix and parameter map, vote — C2's computed NPV will compare against your gut."}</p>
+    <div class="grid2" style="margin-top:8px;">
+      <button class="gameBtn ${(ST.polls['c1_gut']&&ST.polls['c1_gut'].choice==='a')?'primary':''}" data-poll="c1_gut" data-opt="a">${zh?"📈 接受 Gemini：Kansas 擴廠是對的":"📈 Accept Gemini: Kansas is right"}</button>
+      <button class="gameBtn ${(ST.polls['c1_gut']&&ST.polls['c1_gut'].choice==='b')?'primary':''}" data-poll="c1_gut" data-opt="b">${zh?"🤔 有條件接受：碳價若 &gt; $200 要重談":"🤔 Conditional: renegotiate if carbon &gt; $200"}</button>
+      <button class="gameBtn ${(ST.polls['c1_gut']&&ST.polls['c1_gut'].choice==='c')?'primary':''}" data-poll="c1_gut" data-opt="c">${zh?"📉 否決：寧可留現金、或外包越南":"📉 Reject: hold cash or outsource to Vietnam"}</button>
+      <button class="gameBtn ${(ST.polls['c1_gut']&&ST.polls['c1_gut'].choice==='d')?'primary':''}" data-poll="c1_gut" data-opt="d">${zh?"⚖️ 接受但改地點：Poland 比較合理":"⚖️ Accept, switch to Poland"}</button>
+    </div>
+    <p class="sm" style="margin-top:6px;color:var(--muted);">${zh?"（直覺會被記在本地。C2 跑完試算後，你可以自己對照差距。）":"(Saved locally. Compare to NPV after C2.)"}</p>
+  </div>
+
+  <hr class="sep"/>
+  <div class="callout gold">
+    <p class="p" style="font-size:13.5px;"><strong>${zh?"連結 Part 1-2、展望 C2：":"Bridge to C2: "}</strong>${zh?"Michelin 選 Kansas 是 Part 1 <em>CAGE 近距離</em> + Part 2 <em>垂直整合</em> 的工程範例。接下來在 C2，我們用 3 個滑桿讓你<em>親自拖</em>折現率、碳價、效率升級，看 NPV 如何隨假設翻動——這正是 MNE 高階會議室每天的決策。":"Kansas = Part 1 <em>CAGE proximity</em> + Part 2 <em>vertical integration</em>, engineered. Next in C2, three sliders let you <em>directly drag</em> discount rate / carbon / efficiency, watching NPV flip — the same exercise done daily in MNE boardrooms."}</p>
+  </div>
+  `;
+}
+
+// ════════════════════════════════════════════
+//  VIEW C2 — Michelin NPV interactive calculator
+// ════════════════════════════════════════════
+function viewC2(){
+  const zh=ST.lang==="zh";
+  const p = ST.npv;
+  const effLabel = zh ? (p.eff?"啟用":"關閉") : (p.eff?"ON":"OFF");
+
+  // ─── 5 個預設情境 ───
+  const presets = [
+    {k:"tn",       icon:"🔬", zh:"TN 教學版",   en:"TN Academic",      disc:7.75, carbon:114, eff:1,
+      zh_desc:"農業 β + 影子碳價 + 效率升級",  en_desc:"Ag β + shadow carbon + efficiency"},
+    {k:"cfo",      icon:"🏢", zh:"保守 CFO",    en:"Conservative CFO", disc:10.30, carbon:0, eff:0,
+      zh_desc:"集團 β + 忽略碳 + 不升級",      en_desc:"Group β + ignore carbon + no upgrade"},
+    {k:"green",    icon:"🌱", zh:"綠色加碼",    en:"Green Plus",       disc:7.75, carbon:200, eff:1,
+      zh_desc:"高碳價假設（超越政府門檻）",     en_desc:"High carbon (above regulatory floor)"},
+    {k:"pure",     icon:"💸", zh:"純財務",       en:"Pure Finance",    disc:9.00, carbon:0, eff:0,
+      zh_desc:"中性 β + 零碳價 + 僅看 FCF",    en_desc:"Neutral β + zero carbon + FCF only"},
+    {k:"cbam",     icon:"⚖️", zh:"EU 高碳價／碳邊境壓力情境",en:"EU CBAM Scenario", disc:8.50, carbon:130, eff:1,
+      zh_desc:"歐盟邊境稅預期 + 效率升級",      en_desc:"EU border tax expected + efficiency"}
+  ];
+
+  // Check which preset is active
+  const activePreset = presets.find(ps =>
+    Math.abs(ps.disc - p.disc) < 0.01 &&
+    Math.abs(ps.carbon - p.carbon) < 0.5 &&
+    ps.eff === p.eff
+  );
+
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"📊 C2｜Part 3-B：Project Gemini NPV 試算 — 含永續":"📊 C2｜Part 3-B: Project Gemini NPV — with Sustainability"}</h1>
+      <p class="sub">${zh?"5 個預設情境 × 3 滑桿 × 即時 NPV × 翻轉點 × 情境快照":"5 presets × 3 sliders × live NPV × breakeven point × scenario snapshots"}</p>
+    </div>
+    <div class="tag">25 min</div>
+  </div>
+  ${timeTags("c2")}
+
+  <!-- ① Orientation (concise) -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"① 面板使用三步驟":"① Three steps to use this panel"}</p>
+    <div class="grid3" style="margin-top:6px;">
+      <div class="card" style="padding:10px;border-top:4px solid var(--c1);">
+        <p class="sm"><strong>${zh?"Step 1：選預設":"Step 1: Pick a preset"}</strong></p>
+        <p class="sm" style="color:var(--muted);">${zh?"下方 5 個情境按鈕一鍵套用。":"One-click apply via the 5 buttons below."}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--c2);">
+        <p class="sm"><strong>${zh?"Step 2：微調 3 滑桿":"Step 2: Fine-tune 3 sliders"}</strong></p>
+        <p class="sm" style="color:var(--muted);">${zh?"折現率、碳價、效率升級 on/off。":"Discount, carbon price, efficiency on/off."}</p>
+      </div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t1);">
+        <p class="sm"><strong>${zh?"Step 3：存快照對比":"Step 3: Snapshot &amp; compare"}</strong></p>
+        <p class="sm" style="color:var(--muted);">${zh?"最多 4 個快照並排比較。":"Up to 4 snapshots side-by-side."}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 預設情境快速切換 -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"② 🎯 五個預設情境（點擊一鍵套用）":"② 🎯 Five Preset Scenarios (one-click apply)"}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px;">
+      ${presets.map(ps=>{
+        const isActive = activePreset && activePreset.k===ps.k;
+        return `<button class="gameBtn ${isActive?'primary':''}" data-preset="${ps.k}" style="padding:10px;text-align:left;line-height:1.4;">
+          <div style="font-size:14px;font-weight:900;">${ps.icon} ${zh?ps.zh:ps.en}</div>
+          <div style="font-size:11px;color:${isActive?'#fff':'var(--muted)'};margin-top:3px;font-weight:500;">${zh?ps.zh_desc:ps.en_desc}</div>
+          <div class="mono" style="font-size:11px;margin-top:4px;${isActive?'color:#fff;background:rgba(255,255,255,.15);':''}">r=${ps.disc}% · $${ps.carbon} · eff=${ps.eff?"ON":"OFF"}</div>
+        </button>`;
+      }).join("")}
+    </div>
+    ${activePreset ? `<p class="sm" style="margin-top:8px;color:var(--c2);"><strong>✓ ${zh?"目前套用：":"Active: "}</strong>${zh?activePreset.zh:activePreset.en} — ${zh?activePreset.zh_desc:activePreset.en_desc}</p>` : `<p class="sm" style="margin-top:8px;color:var(--muted);">${zh?"目前為自訂參數（未匹配任何預設）。":"Currently custom (no preset match)."}</p>`}
+  </div>
+
+  <!-- ③ 合併面板：滑桿 + 即時結果 -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"③ 🎛️ 參數面板 + 即時 NPV（並列）":"③ 🎛️ Parameter Panel + Live NPV (side-by-side)"}</p>
+    <div class="c2Panel">
+      <!-- Left: sliders -->
+      <div class="c2Sliders">
+        <div class="c2SlideRow">
+          <div class="c2SlideLabel">${zh?"折現率":"Discount rate"} <span class="mono" style="font-size:11px;">WACC</span></div>
+          <input type="range" min="5" max="15" step="0.05" value="${p.disc}" data-npv="disc" style="width:100%;"/>
+          <div class="c2SlideVal" id="npvVal_disc">${p.disc.toFixed(2)}%</div>
+        </div>
+        <p class="sm" style="color:var(--muted);margin:-4px 0 8px 0;">${zh?"7.75% 農業 β ▪ 9.83% 汽車 ▪ 10.30% 集團":"7.75% ag β ▪ 9.83% auto ▪ 10.30% group"}</p>
+
+        <div class="c2SlideRow">
+          <div class="c2SlideLabel">${zh?"內部碳價":"Carbon price"} <span class="mono" style="font-size:11px;">$/tCO₂</span></div>
+          <input type="range" min="0" max="300" step="5" value="${p.carbon}" data-npv="carbon" style="width:100%;"/>
+          <div class="c2SlideVal" id="npvVal_carbon">$${p.carbon.toFixed(0)}</div>
+        </div>
+        <p class="sm" style="color:var(--muted);margin:-4px 0 8px 0;">${zh?"$80 EU ETS ▪ $114 Michelin ▪ $130 IEA NZ ▪ $0=忽略":"$80 EU ETS ▪ $114 Michelin ▪ $130 IEA NZ ▪ $0=ignore"}</p>
+
+        <div class="c2SlideRow">
+          <div class="c2SlideLabel">${zh?"$9.6M 綠色升級":"$9.6M Green upgrade"}</div>
+          <input type="range" min="0" max="1" step="1" value="${p.eff}" data-npv="eff" style="width:100%;"/>
+          <div class="c2SlideVal" id="npvVal_eff">${p.eff?(zh?"啟用":"ON"):(zh?"關閉":"OFF")}</div>
+        </div>
+        <p class="sm" style="color:var(--muted);margin:-4px 0 0 0;">${zh?"開啟 = 既有 40k 產線省 9.4% 成本":"ON = saves ~9.4% on existing 40k line cost"}</p>
+      </div>
+
+      <!-- Right: results -->
+      <div class="c2Results" id="npvResultBox">
+        <!-- populated by updateNpv() -->
+      </div>
+    </div>
+
+    <!-- Decision banner -->
+    <div class="callout gold" id="npvSummaryLine" style="margin-top:12px;font-size:14px;">—</div>
+  </div>
+
+  <!-- ④ 翻轉點 & 快照存檔 -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"④ 🎯 翻轉點（Breakeven）＋ 情境快照":"④ 🎯 Breakeven Point + Scenario Snapshots"}</p>
+    <div class="grid2" style="margin-top:8px;">
+      <div class="card" style="padding:12px;">
+        <p class="cardTitle" style="font-size:13px;">${zh?"🔄 NPV = 0 的翻轉點":"🔄 Breakeven: NPV = 0"}</p>
+        <p class="sm">${zh?"當前碳價與效率設定下，折現率最高可以到多少，NPV 才不會變負？（IRR 即為翻轉點）":"Holding current carbon &amp; efficiency fixed, the highest discount rate at which NPV stays ≥ 0 (= IRR):"}</p>
+        <div id="breakevenBox" style="margin-top:10px;padding:10px;background:rgba(201,162,39,.08);border-radius:8px;text-align:center;font-family:var(--mono);font-weight:900;font-size:22px;color:var(--c2);">—</div>
+        <p class="sm" style="margin-top:6px;color:var(--muted);">${zh?"當前 WACC 離此值越遠，決策越穩健。":"The further current WACC is from this value, the more robust the decision."}</p>
+      </div>
+      <div class="card" style="padding:12px;">
+        <p class="cardTitle" style="font-size:13px;">${zh?"📸 快照情境（最多 4 個並排對比）":"📸 Snapshot (up to 4 side-by-side)"}</p>
+        <p class="sm">${zh?"把目前面板數字存成一張「情境卡」。":"Save current panel values as a scenario card."}</p>
+        <button class="gameBtn primary" id="snapshotAdd" style="margin-top:8px;">${zh?"📸 存為快照":"📸 Take snapshot"}</button>
+        <span class="sm" style="margin-left:10px;color:var(--muted);">${zh?"已存 ":"Saved "}<strong id="snapCount">${ST.c2Snapshots.length}</strong>${zh?" 個":" snapshots"}</span>
+        ${ST.c2Snapshots.length>0 ? `<button class="gameBtn" id="snapshotClear" style="margin-top:8px;margin-left:6px;">${zh?"🗑️ 清空":"🗑️ Clear"}</button>`:""}
+      </div>
+    </div>
+    ${ST.c2Snapshots.length>0 ? `
+    <div style="overflow-x:auto;margin-top:12px;">
+      <table class="tbl">
+        <thead><tr>
+          <th>${zh?"情境":"Scenario"}</th>
+          <th style="text-align:right;">r%</th>
+          <th style="text-align:right;">${zh?"碳價":"Carbon"}</th>
+          <th style="text-align:center;">${zh?"效率":"Eff"}</th>
+          <th style="text-align:right;">NPV</th>
+          <th style="text-align:right;">IRR</th>
+          <th style="text-align:center;">${zh?"決策":"Decision"}</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+          ${ST.c2Snapshots.map((s,i)=>{
+            const go = s.npv>=0;
+            const col = go?"#14532D":"#7F1D1D";
+            return `<tr>
+              <td><strong>${s.label||'#'+(i+1)}</strong></td>
+              <td style="text-align:right;font-family:var(--mono);">${s.disc.toFixed(2)}%</td>
+              <td style="text-align:right;font-family:var(--mono);">$${s.carbon}</td>
+              <td style="text-align:center;">${s.eff?"✓":"—"}</td>
+              <td style="text-align:right;font-family:var(--mono);font-weight:800;color:${col};">${go?"+":"−"}$${(Math.abs(s.npv)/1e6).toFixed(1)}M</td>
+              <td style="text-align:right;font-family:var(--mono);">${s.irr.toFixed(1)}%</td>
+              <td style="text-align:center;font-weight:800;color:${col};">${go?(zh?"接受":"Accept"):(zh?"否決":"Reject")}</td>
+              <td style="text-align:center;"><button class="gameBtn" data-snapdel="${i}" style="padding:4px 10px;font-size:11px;">✕</button></td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+    ${ST.c2Snapshots.length>=2 ? `<p class="sm" style="margin-top:8px;"><strong>${zh?"✨ 對比洞察：":"✨ Comparison insight: "}</strong>${(()=>{
+      const maxN = Math.max(...ST.c2Snapshots.map(s=>s.npv));
+      const minN = Math.min(...ST.c2Snapshots.map(s=>s.npv));
+      const spread = (maxN - minN)/1e6;
+      return zh
+        ? `快照間的 NPV 差距 = <strong>$${spread.toFixed(1)}M</strong>。這就是「假設選擇」對估值的影響量級——比任何單年營運效率都大。`
+        : `Spread across snapshots = <strong>$${spread.toFixed(1)}M</strong>. That's how much 'assumption choice' matters for valuation — dwarfing any single-year operating efficiency.`;
+    })()}</p>`:""}
+    `:""}
+  </div>
+
+  <!-- ⑤ FCF Table -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"⑤ 📊 增量自由現金流（FCF）明細":"⑤ 📊 Incremental Free Cash Flow Detail"}</p>
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:6px;font-size:13.5px;line-height:1.75;">
+      <p style="margin:0 0 6px 0;font-weight:800;color:var(--c2);">${zh?"📐 TN Exhibit 1 拆解（三步驟）：":"📐 TN Exhibit 1 breakdown (three steps):"}</p>
+      <div class="mono" style="display:block;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.9;">
+        ① EBIT = ${zh?"增量營收":"Δ Revenue"} − ${zh?"變動成本":"Var. cost"} − opex − ${zh?"折舊":"Depreciation"}${zh?" (+ 效率節省 · 若 eff=ON)":" (+ Efficiency savings · if eff=ON)"}<br/>
+        ② NOPAT = EBIT × (1 − T)<br/>
+        ③ FCF = NOPAT + ${zh?"折舊":"Depreciation"} − Capex − ΔNWC − ${zh?"碳成本":"Carbon cost"} × (1 − T)
+      </div>
+      <p style="margin:10px 0 0 0;font-size:12.5px;color:var(--muted);">
+        ${zh?"<strong>注 1</strong>：折舊在 EBIT 被扣掉是為了算稅，在 FCF 再加回是因為它不是真實現金流出。兩次彼此抵銷，<em>淨效果只剩稅盾</em>（折舊 × T）。":"<strong>Note 1</strong>: Depreciation is subtracted in EBIT to compute taxes, then added back in FCF because it's not a real cash outflow. The two cancel; <em>net effect is the tax shield only</em> (depreciation × T)."}
+      </p>
+      <p style="margin:4px 0 0 0;font-size:12.5px;color:var(--muted);">
+        ${zh?"<strong>注 2</strong>：<em>效率節省</em>僅在滑桿 C 為 ON 時計入（對既有 40k 產線的成本下降）。":"<strong>Note 2</strong>: <em>Efficiency savings</em> enters only when slider C is ON (cost reduction on existing 40k capacity)."}
+      </p>
+      <p style="margin:4px 0 0 0;font-size:12.5px;color:var(--muted);">
+        ${zh?"<strong>注 3</strong>：碳成本採<em>shadow price 實質化</em>假設——雖然 Kansas 無強制碳費，模型假設若未來真課徵則為稅前費用故有稅盾。若採「純影子價」立場應改為 <span class=\"mono\" style=\"font-size:11px;\">− 碳成本</span> 無稅盾（差異約 25%）。":"<strong>Note 3</strong>: Carbon uses a <em>shadow-price materialized</em> assumption — Kansas has no mandatory fee, but if it materializes as a real tax it would be tax-deductible. The 'pure shadow' view would use <span class=\"mono\" style=\"font-size:11px;\">− carbon cost</span> without the tax shield (~25% gap)."}
+      </p>
+      <p style="margin:8px 0 0 0;font-size:13px;">
+        <strong>${zh?"折現到 2022：":"Discounted to 2022:"}</strong>
+        <span class="mono" style="font-size:12.5px;">NPV = Σ FCF<sub>y</sub> / (1+r)<sup>y</sup>, y=1..10 &nbsp;+&nbsp; ${zh?"殘值":"Terminal"}<sub>10</sub> / (1+r)<sup>10</sup></span>
+      </p>
+    </div>
+    <div style="overflow-x:auto;margin-top:10px;">
+      <table class="tbl" style="min-width:640px;">
+        <thead><tr>
+          <th>${zh?"年度":"Year"}</th>
+          <th style="text-align:right;">${zh?"營收":"Revenue"}</th>
+          <th style="text-align:right;">EBIT</th>
+          <th style="text-align:right;">${zh?"碳成本":"Carbon cost"}</th>
+          <th style="text-align:right;">FCF</th>
+          <th style="text-align:right;">PV</th>
+        </tr></thead>
+        <tbody id="fcfTableBody">
+          <tr><td colspan="6" style="text-align:center;color:var(--muted);">${zh?"運算中…":"Computing…"}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sm" style="font-size:12px;color:var(--muted);margin-top:6px;">${zh?"※ 教學簡化版；terminal recovery 以 $15M 殘值 + NWC 回收估列。":"※ Simplified; terminal recovery = $15M salvage + NWC recovery."}</p>
+  </div>
+
+  <!-- ⑥ Sensitivity Table -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"⑥ 🎯 敏感度：三個 β 選擇 × 當前碳價與效率":"⑥ 🎯 Sensitivity: three β choices × current carbon & efficiency"}</p>
+    <p class="p" style="font-size:14px;">${zh?"「β 選擇是管理判斷／治理問題，不是純財務問題」。Michelin 輪胎／履帶／汽車 β 各異。下表顯示三種合理選項下的 NPV（碳價與效率依當前設定）：":"'β choice is managerial/governance judgment, not pure finance'. Michelin tire/track/auto betas differ. Table shows NPV under three defensible choices (carbon &amp; efficiency follow current setting):"}</p>
+    <table class="tbl" style="margin-top:8px;">
+      <thead><tr>
+        <th>${zh?"β 假設":"β Assumption"}</th>
+        <th style="text-align:right;">r</th>
+        <th style="text-align:right;">NPV</th>
+        <th>${zh?"決策":"Decision"}</th>
+      </tr></thead>
+      <tbody id="sensTableBody">
+        <tr><td colspan="4" style="text-align:center;color:var(--muted);">${zh?"運算中…":"Computing…"}</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange" style="margin-top:10px;">
+      <p class="p" style="font-size:13px;"><strong>${zh?"⚠️ 關鍵教學點：":"⚠️ Key teaching point: "}</strong>${zh?"TN 推薦 <strong>7.75%</strong>（農業分部）——履帶銷售隨<em>農民現金流</em>波動，系統性風險更接近農機而非乘用車。但若 CFO 堅持用集團 β 統一口徑，專案被否決的可能性會上升。NPV 數字客觀，但前提（折現率）是<em>選擇</em>。":"TN recommends <strong>7.75%</strong> (ag segment) — track sales co-move with <em>farmer cash flow</em>; systematic risk ≈ ag machinery, not autos. If CFO insists on group β, reject rate rises. NPV is objective; discount rate premise is a <em>choice</em>."}</p>
+    </div>
+  </div>
+
+  <!-- ⑦ 永續如何進 NPV：互動三路徑 -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"⑦ 🌱 永續進 NPV 的三條路徑（與當前情境連動）":"⑦ 🌱 Three Paths: sustainability into NPV (live-linked)"}</p>
+    <div class="grid3" style="margin-top:10px;">
+      <div class="card" style="padding:12px;border-top:4px solid #991B1B;">
+        <p class="cardTitle" style="font-size:13px;color:#991B1B;">① ${zh?"碳成本：負 FCF":"Carbon cost: negative FCF"}</p>
+        <p class="sm">${zh?"Y10 滿產：7,585 tCO₂/年 × 當前碳價 <strong>$${p.carbon}/t</strong> = <strong>$${(7585*p.carbon/1000).toFixed(0)}K/年</strong>。":"Y10: 7,585 tCO₂/yr × current <strong>$${p.carbon}/t</strong> = <strong>$${(7585*p.carbon/1000).toFixed(0)}K/yr</strong>."}</p>
+        <p class="sm" style="margin-top:6px;font-family:var(--mono);">${zh?"10 年 NPV 拖累（含折現）":"10-yr NPV drag (discounted)"}: <span id="sust1" style="font-weight:800;color:#991B1B;">—</span></p>
+      </div>
+      <div class="card" style="padding:12px;border-top:4px solid #14532D;">
+        <p class="cardTitle" style="font-size:13px;color:#14532D;">② ${zh?"效率升級：正 FCF":"Efficiency: positive FCF"}</p>
+        <p class="sm">${zh?"$9.6M 一次性 → 既有 40,000 條/年產線省 ~9.4% 生產成本，長期保留。目前：":"$9.6M once → ~9.4% cost saving on existing 40,000 tracks/yr, held forever. Currently: "}<strong>${effLabel}</strong>${zh?"。":"."}</p>
+        <p class="sm" style="margin-top:6px;font-family:var(--mono);">${zh?"10 年 NPV 貢獻":"10-yr NPV contribution"}: <span id="sust2" style="font-weight:800;color:#14532D;">—</span></p>
+      </div>
+      <div class="card" style="padding:12px;border-top:4px solid #1E40AF;">
+        <p class="cardTitle" style="font-size:13px;color:#1E40AF;">③ ${zh?"未計入：品牌／監管選擇權":"Uncounted: brand/regulatory options"}</p>
+        <p class="sm">${zh?"NPV <strong>沒</strong>內化：(i) 2030 減排承諾的品牌商譽；(ii) 若美歐實施 CBAM，已減排的<em>實物期權</em>價值。":"NPV does <strong>not</strong> internalize: (i) brand value of hitting 2030 target; (ii) real-option value if EU CBAM or similar US border-carbon mechanisms expand to relevant categories."}</p>
+        <p class="sm" style="margin-top:6px;color:var(--muted);"><em>${zh?"量化能量化的；剩下放在定性註記。":"Quantify what's quantifiable; the rest stays qualitative."}</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑧ Reflection quizzes -->
+  <div class="card" style="border-left:5px solid var(--c2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--c2);">${zh?"⑧ 反思題（先試算預設情境再作答）":"⑧ Reflection quizzes (try presets first, then answer)"}</p>
+  ${quizCard({
+    key:"c2_q1",
+    q:"如果 CFO 堅持把折現率從 <strong>7.75% 改為 10.30%</strong>（集團 β），其他條件不變，最接近發生的是？<br/><em>🎯 提示：直接點選上方「保守 CFO」預設比較。</em>",
+    q_en:"If CFO switches discount rate from <strong>7.75% to 10.30%</strong> (group β), all else equal, what happens?<br/><em>🎯 Hint: click the \"Conservative CFO\" preset above for comparison.</em>",
+    opts:[
+      ["NPV 大幅上升","NPV rises sharply"],
+      ["NPV 從 +$26M 降到約 +$13M，仍接受但空間變小","NPV drops from +$26M to ~+$13M; still accept but thinner margin"],
+      ["NPV 變負，否決","NPV goes negative; reject"],
+      ["IRR 會提高","IRR increases"]
+    ],
+    ans:1,
+    exp:"正解 B。TN 實測：NPV 從 ~$27M 降至 ~$13M（-49%）。IRR 固定在 12-13%，只是跨過 10.30% hurdle 的空間縮小。<em>折現率選擇比你以為的更重要</em>——這個選擇本身是<strong>治理決定</strong>，不是技術問題。",
+    exp_en:"Correct: B. TN actual: NPV drops from ~$27M to ~$13M (−49%). IRR stays ~12-13%; just the margin above 10.30% shrinks. <em>Discount rate choice matters more than you think</em> — this choice is a <strong>governance decision</strong>, not a technical one."
+  })}
+
+  ${quizCard({
+    key:"c2_q2",
+    q:"把碳價從 $0 推到 $300/tCO₂（極端情境），對 Project Gemini 的決策最可能影響？<br/><em>🎯 提示：拖動碳價滑桿到 300，觀察右側 NPV 卡。</em>",
+    q_en:"Pushing carbon from $0 to $300/tCO₂ (extreme), most likely impact on Gemini?<br/><em>🎯 Hint: drag carbon slider to 300, watch NPV card.</em>",
+    opts:[
+      ["NPV 從正變負（否決）","NPV flips negative (reject)"],
+      ["NPV 下降約 $4-7M，仍明顯為正（接受）","NPV drops ~$4-7M, still clearly positive (accept)"],
+      ["不影響 NPV","No effect"],
+      ["IRR 會提高","IRR rises"]
+    ],
+    ans:1,
+    exp:"正解 B。@7.75% 折現，$300 碳價只帶來 $5-7M 累積 NPV 影響；基礎 NPV 仍為正。<strong>Project Gemini 對碳不敏感</strong>——Kansas 本地化已削減運輸碳排。<em>永續與財務邏輯可以共存</em>。",
+    exp_en:"Correct: B. @7.75%, $300 carbon adds only $5-7M cumulative NPV impact; base stays positive. <strong>Gemini is insensitive to carbon</strong> — Kansas localization already cuts transport emissions. <em>Sustainability and finance can coexist</em>."
+  })}
+  </div>
+
+  <hr class="sep"/>
+  <div class="callout purple">
+    <p class="p" style="font-size:13.5px;"><strong>${zh?"Part 3 結論：":"Part 3 closing: "}</strong>${zh?"跨國擴張不是「算 NPV、接受／否決」這麼簡單——它是<strong>一整套治理假設的堆疊</strong>：折現率（β 選擇）、碳價（影子價選擇）、效率投資範圍（策略意圖）。NPV 把這些假設<em>顯性化</em>讓我們辯論；它不替代價值判斷。回 Part 1：Michelin 選 Kansas = 擁抱 CAGE 近距離；Part 2：垂直整合 = 搶 intangible governance asset；Part 3：量化這一切、把永續攤在試算表上看。":"Cross-border expansion isn't 'run an NPV, accept/reject'. It's <strong>a stack of governance assumptions</strong>: discount rate (β), carbon (shadow price), efficiency scope (strategic intent). NPV <em>makes these explicit</em> so we can debate; it doesn't replace value judgment. Back to Part 1: Kansas = CAGE proximity; Part 2: integration = intangible asset; Part 3: quantify all, put sustainability on one sheet."}</p>
+  </div>
+  `;
+}
+
+// ════════════════════════════════════════════
+//  VIEW S1 — Synthesis / Memo scaffold
+// ════════════════════════════════════════════
+function viewS1(){
+  const zh=ST.lang==="zh";
+  const layers = [
+    {
+      k:"memo_1", cls:"l1",
+      zh_t:"Layer 1｜CAGE 距離診斷",
+      en_t:"Layer 1｜CAGE Distance Diagnosis",
+      prompt_zh:[
+        "① 以 Michelin Kansas 擴廠為例，和另一個候選地（越南或波蘭）比 CAGE 四距離。",
+        "② 點出：哪個維度<em>最有利</em>？哪個<em>最不利</em>？",
+        "③ 用 3-5 句回答（不需面面俱到，挑主要摩擦點）。"
+      ],
+      prompt_en:[
+        "① Compare Michelin Kansas vs an alternative (Vietnam or Poland) across 4 CAGE dimensions.",
+        "② Identify: which dimension is <em>most favorable</em>? <em>Most adverse</em>?",
+        "③ Answer in 3-5 sentences (do not list all 4; pick the primary friction)."
+      ],
+      ph_zh:"例如：相較越南，Kansas 在 Geographic 距離上……而 Economic 距離在⋯⋯",
+      ph_en:"e.g. vs Vietnam, Kansas's Geographic distance is…, while Economic distance…"
+    },
+    {
+      k:"memo_2", cls:"l2",
+      zh_t:"Layer 2｜ADDING / GVC 策略定位",
+      en_t:"Layer 2｜ADDING / GVC Positioning",
+      prompt_zh:[
+        "① Michelin 選<em>垂直整合式擴廠</em>而不是外包亞洲代工——屬於 Gereffi 五模式哪一種？",
+        "② 用 Ghemawat 的 ADDING scorecard 指出<em>至少 2 個</em>被強化的字母（如 A-Adding volume、I-Industry）。",
+        "③ 連結 Part 2 Zara 的邏輯：為什麼兩者都選「近岸整合」而非「遠岸套利」？"
+      ],
+      prompt_en:[
+        "① Michelin chose <em>vertical-integration expansion</em>, not Asian outsourcing — which of Gereffi's 5 modes?",
+        "② Using Ghemawat's ADDING scorecard, cite <em>≥ 2</em> strengthened letters (e.g. A-Adding volume, I-Industry).",
+        "③ Link to Part 2 Zara logic: why do both pick 'nearshore integration' over 'offshore arbitrage'?"
+      ],
+      ph_zh:"例如：接近 Hierarchy；ADDING 的 A（更貼近 John Deere 需求、擴大銷量）+ I（改善農機履帶產業結構）被強化。和 Zara 同理⋯⋯",
+      ph_en:"e.g. Hierarchy-style; ADDING's A (closer access to John Deere demand / higher volume) + I (ag-track industry structure) strengthened. Same logic as Zara…"
+    },
+    {
+      k:"memo_3", cls:"l3",
+      zh_t:"Layer 3｜NPV 數字表態",
+      en_t:"Layer 3｜NPV Numerical Take",
+      prompt_zh:[
+        "① 用一句話告訴 CFO：建議以<em>哪個折現率</em>評估本案？（7.75% / 9.83% / 10.30%）",
+        "② 寫出該折現率下、你試算出的<em>NPV 區間</em>（含／不含碳價、含／不含效率升級）。",
+        "③ 指出本案最主要的<em>敏感參數</em>（折現率？碳價？效率？）——引用 Part 3-B 互動結果。"
+      ],
+      prompt_en:[
+        "① Tell the CFO in one line: which <em>discount rate</em> to use? (7.75% / 9.83% / 10.30%)",
+        "② Cite the <em>NPV range</em> you saw at that rate (with/without carbon, with/without efficiency).",
+        "③ Name the <em>most sensitive</em> parameter — cite Part 3-B interactive results."
+      ],
+      ph_zh:"建議以 7.75% 評估（農業 β），此折現率下 NPV 約 $19M（含碳價 + 效率）。最敏感的是折現率⋯⋯",
+      ph_en:"Recommend 7.75% (ag β); NPV ≈ $19M at that rate (w/ carbon + efficiency). Most sensitive: discount rate…"
+    },
+    {
+      k:"memo_4", cls:"l4",
+      zh_t:"Layer 4｜永續視角與最終建議",
+      en_t:"Layer 4｜Sustainability Lens & Final Recommendation",
+      prompt_zh:[
+        "① 如果碳價從 $0 跳到 $300/tCO₂，你的建議會變嗎？（定量：ΔNPV？）",
+        "② 定性層面：加入「品牌價值 + 實物期權」後，決策依據會變強還是變弱？",
+        "③ 3-5 句結語：你最終建議 <strong>Accept / Conditional / Reject</strong>，並說一個<em>最關鍵的反駁點</em>。"
+      ],
+      prompt_en:[
+        "① If carbon rose from $0 to $300/tCO₂, would you change the call? (Quant: ΔNPV?)",
+        "② Qualitative: once you add 'brand value + real option', is the case stronger or weaker?",
+        "③ In 3-5 sentences give final <strong>Accept / Conditional / Reject</strong> + one <em>strongest counter-argument</em>."
+      ],
+      ph_zh:"定量：NPV 僅下降約 $4-7M；定性：早減排保留 EU CBAM 選擇權。最終建議 Accept，最強反駁是⋯⋯",
+      ph_en:"Quant: NPV drops only ~$4-7M; qual: early abatement preserves EU CBAM option. Final: Accept; strongest counter…"
+    }
+  ];
+
+  const totalWC = layers.reduce((sum,L)=>{
+    return sum + countWords(ST.ws[L.k]||"");
+  }, 0);
+
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"📝 S1｜整合備忘錄 — 四層練習":"📝 S1｜Integration Memo — 4-Layer Scaffold"}</h1>
+      <p class="sub">${zh?"壓縮本週三個 Part 成一份給 Michelin CFO 的建議備忘錄 · 診斷 → 策略 → 數字 → 永續":"Compress this week's three Parts into a memo for Michelin's CFO · Diagnosis → Strategy → Numbers → Sustainability"}</p>
+    </div>
+    <div class="tag">${totalWC} ${zh?"字":"words"}</div>
+  </div>
+  ${timeTags("s1")}
+
+  <!-- How to use -->
+  <div class="card" style="border-left:5px solid var(--s1);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--s1);">${zh?"① 使用方式：由淺入深四層":"① How to use: four progressive layers"}</p>
+    <p class="p" style="font-size:14px;">${zh?"每層有 <em>3 個引導提示 ①②③</em>——不是每題都要答滿，而是幫你抓住該層的思考結構。寫完自動存在瀏覽器，可一鍵複製全文。":"Each layer has <em>3 guided prompts ①②③</em> — not every bullet needs full answer; they anchor the layer's thought structure. Auto-saved locally; one-click export at bottom."}</p>
+    <div class="grid4" style="margin-top:8px;">
+      <div class="card" style="padding:10px;border-top:4px solid var(--t2);"><p class="sm"><strong>L1 · CAGE 診斷</strong> — ${zh?"診斷題":"Diagnose"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t1);"><p class="sm"><strong>L2 · ADDING / GVC</strong> — ${zh?"策略題":"Strategize"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t3);"><p class="sm"><strong>L3 · NPV 數字</strong> — ${zh?"量化題":"Quantify"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--s1);"><p class="sm"><strong>L4 · 永續建議</strong> — ${zh?"綜合判斷":"Synthesize"}</p></div>
+    </div>
+  </div>
+
+  <!-- Memo scaffold -->
+  <div class="memoScaffold">
+    ${layers.map(L=>{
+      const v = ST.ws[L.k]||"";
+      const wc = countWords(v);
+      const hasContent = v.trim().length>0;
+      const prompts = zh ? L.prompt_zh : L.prompt_en;
+      const ph = zh ? L.ph_zh : L.ph_en;
+      return `
+      <div class="memoLayer ${L.cls}">
+        <div class="memoLayerLabel">${zh?L.zh_t:L.en_t}</div>
+        <ul class="ul" style="font-size:13px;margin-top:2px;margin-bottom:8px;">
+          ${prompts.map(p=>`<li>${p}</li>`).join("")}
+        </ul>
+        <textarea class="memoField ${hasContent?'has-content':''}" data-wskey="${L.k}" placeholder="${ph}">${v.replace(/</g,'&lt;')}</textarea>
+        <div class="memoWordCount">${wc} ${zh?"字":"words"}</div>
+      </div>`;
+    }).join("")}
+  </div>
+
+  <!-- Export + Hints -->
+  <div class="row" style="margin-top:12px;gap:8px;">
+    <button id="memoHints" class="btn">${zh?"💡 寫作提示":"💡 Writing hints"}</button>
+    <button id="memoExport" class="btn primary">${zh?"📋 複製全部備忘錄":"📋 Copy all layers"}</button>
+  </div>
+
+  <div id="memoHintsBox" class="revealBox">
+    <div class="callout gold" style="margin-top:10px;">
+      <p class="p" style="font-size:13.5px;"><strong>${zh?"寫作建議：":"Writing hints:"}</strong></p>
+      <ul class="ul" style="font-size:13px;margin-left:18px;">
+        <li>${zh?"<strong>Layer 1</strong>：避免「每個距離都大」的平均主義 — 挑出<em>主要</em>摩擦點；可以說「Geographic 最有利、Economic 邊際匹配」。":"<strong>Layer 1</strong>: avoid 'every distance is big' — pick the <em>primary</em> friction; e.g. 'Geographic most favorable, Economic marginal match'."}</li>
+        <li>${zh?"<strong>Layer 2</strong>：一定要指名 Gereffi 五模式之一（Hierarchy／Relational／Modular／Captive／Market），再對應 ADDING 字母（如 D、I、N）。":"<strong>Layer 2</strong>: name one of Gereffi's 5 modes (Hierarchy/Relational/Modular/Captive/Market), then map to ADDING letters (e.g. D, I, N)."}</li>
+        <li>${zh?"<strong>Layer 3</strong>：引用<em>具體數字</em>（例：7.75% → ~$19M；10.30% → ~$5M）。強調哪個參數最敏感。":"<strong>Layer 3</strong>: cite <em>specific numbers</em> (e.g. 7.75% → ~$19M; 10.30% → ~$5M). State which parameter is most sensitive."}</li>
+        <li>${zh?"<strong>Layer 4</strong>：區分「計入 NPV 的碳成本」vs「NPV 無法捕捉的品牌／選擇權」。最終明確說 Accept / Conditional / Reject。":"<strong>Layer 4</strong>: separate 'carbon cost inside NPV' from 'intangible brand/option value'. State explicit Accept / Conditional / Reject."}</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="sep"/>
+  <div class="callout purple">
+    <p class="p" style="font-size:13.5px;"><strong>${zh?"一句話總結本週：":"One-sentence wrap-up: "}</strong>${zh?"Ghemawat 的 CAGE + ADDING + AAA 告訴你<em>是否跨、怎麼跨</em>；Kano/Nachum 告訴你<em>跨出去誰分到</em>；Michelin Kansas 示範如何把兩者<em>壓進一張試算表</em>並把永續內化——這是當代跨國投資決策的標準工具組。":"Ghemawat's CAGE + ADDING + AAA tells you <em>whether &amp; how to cross</em>; Kano/Nachum tell you <em>who captures value</em>; Michelin Kansas shows how to <em>compress both into one spreadsheet</em> with sustainability internalized — today's standard MNE investment toolkit."}</p>
+  </div>
+  `;
+}
+
+// ════════════════════════════════════════════
+//  VIEW Student — worksheet (W8 wsCard scaffold)
+// ════════════════════════════════════════════
+function viewStudent(){
+  const zh=ST.lang==="zh";
+  const fields=[
+    {
+      k:"ws_cage",
+      icon:"🗺️",
+      zh_t:"Q1｜CAGE 距離診斷：ASUS 德國研發中心",
+      en_t:"Q1｜CAGE Distance Diagnosis: ASUS Germany R&D Center",
+      zh_q:"ASUS 考慮在德國慕尼黑設立一個 NB 研發中心（聚焦電競 / 商務筆電）。請依 Ghemawat 的 CAGE 四距離框架，各給出 <em>1 個具體</em>的距離觀察，並最後指出<em>哪一個維度</em>最可能成為 deal-breaker。",
+      en_q:"ASUS considers setting up a NB R&D center in Munich, Germany (focused on gaming / business laptops). Using Ghemawat's CAGE framework, give <em>one concrete</em> observation per dimension, then identify <em>which dimension</em> is most likely the deal-breaker.",
+      zh_hint:"① Cultural：語言 / 工作倫理 / 管理風格　② Administrative：歐盟 GDPR / 資料在地化 / 補貼規範　③ Geographic：時差 / 運籌 / 研發與量產的距離　④ Economic：薪資結構 / 採購成本 / 消費者購買力",
+      en_hint:"① Cultural: language / work ethic / management style　② Administrative: EU GDPR / data localization / subsidy rules　③ Geographic: time zone / logistics / R&D-to-production distance　④ Economic: wage structure / sourcing cost / consumer purchasing power",
+      zh_ph:"Cultural: …；Administrative: …；Geographic: …；Economic: …；最關鍵 deal-breaker 是 ___，因為 ___。",
+      en_ph:"Cultural: …; Administrative: …; Geographic: …; Economic: …; Key deal-breaker is ___ because ___."
+    },
+    {
+      k:"ws_gvc",
+      icon:"🧵",
+      zh_t:"Q2｜GVC 治理模式判斷：H&M × 孟加拉",
+      en_t:"Q2｜GVC Governance Mode: H&M × Bangladesh",
+      zh_q:"孟加拉廠為 H&M 代工 basic T-shirt 的訂單，應歸類為 Gereffi, Humphrey & Sturgeon (2005) 五種治理模式中的<em>哪一種</em>？寫出你判斷的 3 個依據（提示：看 complexity of transactions / codifiability / supplier capability）。",
+      en_q:"Bangladesh factories producing basic T-shirts for H&M — which of Gereffi, Humphrey & Sturgeon's (2005) five governance modes? State 3 reasons (hint: look at complexity of transactions / codifiability / supplier capability).",
+      zh_hint:"五模式：Hierarchy（完全內化）／Captive（高度控制但非所有）／Relational（複雜但互信）／Modular（標準介面）／Market（價格交易）。Basic T-shirt 設計簡單、規格容易寫清楚，但工廠能力高度落差 → 指向其中一種。",
+      en_hint:"Five modes: Hierarchy (full ownership) / Captive (tight control, non-owned) / Relational (complex but trust-based) / Modular (standard interface) / Market (arm's length). Basic tee = simple, codifiable specs, but supplier capability varies widely → points to one specific mode.",
+      zh_ph:"我判斷是 ___ 模式，因為 ①設計/規格 ___；②工廠能力 ___；③H&M 的監管密度 ___。",
+      en_ph:"I classify as ___, because ①design/spec codifiability ___; ②supplier capability ___; ③H&M's monitoring intensity ___."
+    },
+    {
+      k:"ws_npv",
+      icon:"📊",
+      zh_t:"Q3｜NPV 敏感度：Project Gemini 三參數",
+      en_t:"Q3｜NPV Sensitivity: Project Gemini's 3 Key Parameters",
+      zh_q:"回到 Part 3 的 Michelin Kansas 試算表，調整三個參數（折現率 7.75% / 9.83% / 10.30%、碳價 $0 → $300 / tCO₂、效率升級 0% → 10%），觀察 NPV 變動。<em>哪一個</em>參數對 NPV 的影響最大？為什麼？這對 CFO 的融資與減碳優先順序有什麼啟示？",
+      en_q:"Return to Part 3's Michelin Kansas model. Toggle the three parameters (discount 7.75% / 9.83% / 10.30%, carbon $0 → $300 / tCO₂, efficiency 0% → 10%) and observe NPV shifts. <em>Which</em> parameter moves NPV the most? Why? What does this imply for the CFO's financing and decarbonization priorities?",
+      zh_hint:"折現率：從 7.75% → 10.30% 時 NPV 會從 ~$26M 跌到 ~$13M（半砍）。碳價影響 ~$4-7M。效率影響幾 %。→ 先談哪個「彈性最大」，再談「可控性」。",
+      en_hint:"Discount rate: from 7.75% → 10.30% NPV drops ~$26M → ~$13M (halving). Carbon price shifts ~$4-7M. Efficiency shifts a few %. → Discuss 'largest elasticity' first, then 'controllability'.",
+      zh_ph:"影響最大的是 ___，因為 ___（具體數字 ___）。對 CFO 的啟示：___。",
+      en_ph:"Most sensitive parameter is ___ because ___ (specific number ___). Implication for CFO: ___."
+    },
+    {
+      k:"ws_ethics",
+      icon:"⚖️",
+      zh_t:"Q4｜跨國勞動倫理：SPA 品牌的 CSR 設計",
+      en_t:"Q4｜MNE Labor Ethics: SPA Brand's CSR Design",
+      zh_q:"Nachum & Uramoto (2022) 指出孟加拉成衣工人僅分到終端零售價的 2-5%。假設你是一家 SPA 品牌（Zara / H&M / Uniqlo 擇一）的 CSR 主管，請提出一個<em>經濟上可行</em>（不會讓品牌失去成本競爭力）、<em>治理上可落實</em>（供應商願意配合）的改善方案。",
+      en_q:"Nachum & Uramoto (2022) show Bangladesh garment workers capture only 2-5% of retail value. As CSR head of an SPA brand (choose Zara / H&M / Uniqlo), propose an <em>economically feasible</em> (preserves cost competitiveness) and <em>governance-implementable</em> (suppliers will comply) improvement plan.",
+      zh_hint:"可思考方向：①Living wage floor + 透明成本共擔　②長期合約換 SAFETY / 訓練投資　③碳/ESG 升級補貼（品牌 + 政府）　④Modular → Relational 治理升級。避免空洞的「提高工資」；要說明錢從哪裡來、誰監督、可持續性如何。",
+      en_hint:"Possible angles: ①Living wage floor + transparent cost-sharing　②Long-term contracts for SAFETY / training investment　③Carbon/ESG upgrade subsidies (brand + gov)　④Governance shift Modular → Relational. Avoid vague 'raise wages' — specify funding, monitoring, and sustainability.",
+      zh_ph:"方案：___；經濟可行性（誰付錢 / 對毛利影響）：___；治理落實機制：___。",
+      en_ph:"Proposal: ___; Economic feasibility (who pays / margin impact): ___; Governance mechanism: ___."
+    }
+  ];
+
+  const totalWC = fields.reduce((sum,f)=>{
+    return sum + countWords(ST.ws[f.k]||"");
+  }, 0);
+  const donePct = Math.round(100 * fields.filter(f=>(ST.ws[f.k]||"").trim().length>0).length / fields.length);
+
+  return `
+  <div class="sectionHead">
+    <div>
+      <h1 class="h1">${zh?"📋 W8 學員工作單":"📋 W8 Student Worksheet"}</h1>
+      <p class="sub">${zh?"課後整理與自我評估 · 四題貫穿本週 CAGE / GVC / NPV / 倫理四大主軸":"Post-class consolidation & self-assessment · 4 questions spanning this week's CAGE / GVC / NPV / Ethics"}</p>
+    </div>
+    <div class="tag">${donePct}% · ${totalWC} ${zh?"字":"words"}</div>
+  </div>
+  ${timeTags("student")}
+
+  <!-- Instructions card -->
+  <div class="card" style="border-left:5px solid var(--t2);margin-bottom:14px;">
+    <p class="cardTitle" style="color:var(--t2);">${zh?"① 怎麼用這份工作單？":"① How to use this worksheet"}</p>
+    <p class="p" style="font-size:13.5px;">${zh?"每題給 <strong>2-5 句</strong>的回答（約 40-80 字）。每題下方有灰底「思考支架」給你結構提示——<em>不一定每條都要答</em>，重點是挑一個角度講深。答案自動存在瀏覽器，重新整理不會掉。":"Write <strong>2-5 sentences</strong> per question (~40-80 words). Each has a gray 'thinking scaffold' below with structural hints — <em>not every line needs an answer</em>; pick one angle and go deep. Auto-saved locally."}</p>
+    <div class="grid4" style="margin-top:8px;">
+      <div class="card" style="padding:10px;border-top:4px solid var(--t1);"><p class="sm"><strong>Q1 · CAGE</strong> — ${zh?"Ghemawat 2001":"Ghemawat 2001"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t2);"><p class="sm"><strong>Q2 · GVC</strong> — ${zh?"Gereffi 2005":"Gereffi 2005"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--t3);"><p class="sm"><strong>Q3 · NPV</strong> — ${zh?"Michelin 產能決策":"Michelin Production Capacity"}</p></div>
+      <div class="card" style="padding:10px;border-top:4px solid var(--s1);"><p class="sm"><strong>Q4 · Ethics</strong> — ${zh?"Nachum/Uramoto 2022":"Nachum/Uramoto 2022"}</p></div>
+    </div>
+  </div>
+
+  ${fields.map((f,i)=>{
+    const v=ST.ws[f.k]||"";
+    const wc=countWords(v);
+    const hasContent=v.trim().length>0;
+    return `
+    <div class="wsCard" style="${hasContent?'border-left:5px solid var(--green);':''}">
+      <div class="wsLabel">${f.icon} ${zh?f.zh_t:f.en_t}</div>
+      <p class="p" style="font-size:13.5px;margin-bottom:8px;">${zh?f.zh_q:f.en_q}</p>
+      <div class="callout" style="background:rgba(0,0,0,.03);padding:10px 12px;margin:6px 0 10px 0;border-left:3px solid var(--sub);">
+        <p class="sm" style="margin:0;"><strong>${zh?"💭 思考支架：":"💭 Thinking scaffold: "}</strong>${zh?f.zh_hint:f.en_hint}</p>
+      </div>
+      <textarea class="wsTextarea" data-wskey="${f.k}" placeholder="${zh?f.zh_ph:f.en_ph}" onchange="wsChange(this)">${v.replace(/</g,'&lt;')}</textarea>
+      <div class="memoWordCount">${wc} ${zh?"字":"words"}</div>
+    </div>`;
+  }).join("")}
+
+  <div class="callout green" style="margin-top:14px;">
+    <p class="p" style="font-size:13px;">${zh?"✅ 本週所有工作單答案已<em>自動存入瀏覽器</em>，重新整理頁面不會遺失。若要帶走，可使用瀏覽器選取 → 複製。":"✅ All worksheet answers are <em>auto-saved in your browser</em> — refreshing the page won't lose them. To export, select all and copy manually."}</p>
+  </div>
+
+  <div class="callout purple" style="margin-top:10px;">
+    <p class="p" style="font-size:13.5px;"><strong>${zh?"📌 本週四題串起的主線：":"📌 The thread linking this week's 4 questions: "}</strong>${zh?"Q1 診斷「要不要跨」（CAGE）→ Q2 決定「跨出去怎麼治理」（GVC）→ Q3 用「具體數字」壓力測試（NPV）→ Q4 回到「跨國企業的社會責任」（價值分配與倫理）。這正是 IBS 課程的完整決策鏈條。":"Q1 diagnoses 'whether to cross' (CAGE) → Q2 decides 'how to govern the crossing' (GVC) → Q3 stress-tests with 'specific numbers' (NPV) → Q4 returns to 'the MNE's social responsibility' (value distribution & ethics). This is the full IBS decision chain."}</p>
+  </div>
+  `;
+}
+
+// (all views injected above)
+
+
+// ════════════════════════════════════════════
+//  RENDER & EVENT BINDING
+// ════════════════════════════════════════════
+function render(){
+  const views={s0:viewS0,t:viewT,c1:viewC1,c2:viewC2,s1:viewS1,student:viewStudent};
+  const fn=views[ST.view]||viewS0;
+  content.innerHTML=fn();
+
+  // Nav active state
+  document.querySelectorAll(".navItem").forEach(b=>{
+    b.classList.toggle("active",b.dataset.view===ST.view);
+  });
+
+  // Poll votes
+  document.querySelectorAll("[data-poll]").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      vote(this.dataset.poll,this.dataset.opt);
+      render();
+    });
+  });
+
+  // Quiz
+  document.querySelectorAll("[data-quiz]").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      if(ST.quizDone[this.dataset.quiz])return;
+      ST.quizDone[this.dataset.quiz]=parseInt(this.dataset.idx)+1;
+      save(); render();
+    });
+  });
+
+  // Classify drag-drop
+  setupClassify();
+
+  // AAA picker
+  document.querySelectorAll("[data-aaa]").forEach(el=>{
+    el.addEventListener("click",function(){
+      ST.aaaChoice=this.dataset.aaa; save(); render();
+    });
+  });
+
+  // GVC governance picker
+  document.querySelectorAll("[data-gvc]").forEach(el=>{
+    el.addEventListener("click",function(){
+      ST.gvcChoice=this.dataset.gvc; save(); render();
+    });
+  });
+
+  // CAGE heat map selection
+  document.querySelectorAll("[data-cage]").forEach(el=>{
+    el.addEventListener("click",function(){
+      ST.cageSel=this.dataset.cage; save(); render();
+    });
+  });
+
+  // Scene tabs
+  document.querySelectorAll("[data-scenetab]").forEach(el=>{
+    el.addEventListener("click",function(){
+      if(!ST.sceneTabs) ST.sceneTabs={};
+      ST.sceneTabs[this.dataset.scene]=parseInt(this.dataset.scenetab);
+      save(); render();
+    });
+  });
+
+  // Classify reveal / reset
+  const cr=document.getElementById("classifyReveal");
+  if(cr) cr.addEventListener("click",()=>{document.getElementById("classifyRevealBox").classList.toggle("visible");});
+  const crr=document.getElementById("classifyReset");
+  if(crr) crr.addEventListener("click",()=>{
+    const keys=Object.keys(ST.classifyDone).filter(k=>k.startsWith("t1_"));
+    keys.forEach(k=>delete ST.classifyDone[k]);
+    save(); render();
+  });
+
+  // Generic reveal buttons
+  document.querySelectorAll("[data-reveal]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const box=document.getElementById(b.dataset.reveal);
+      if(box) box.classList.toggle("visible");
+    });
+  });
+
+  // NPV sliders
+  document.querySelectorAll("[data-npv]").forEach(el=>{
+    el.addEventListener("input",function(){
+      ST.npv[this.dataset.npv]=parseFloat(this.value); save();
+      updateNpv();
+    });
+  });
+  if(document.getElementById("npvResultBox")) updateNpv();
+
+  // Memo hints + export
+  const mh=document.getElementById("memoHints");
+  if(mh) mh.addEventListener("click",()=>{document.getElementById("memoHintsBox").classList.toggle("visible");});
+  const me=document.getElementById("memoExport");
+  if(me) me.addEventListener("click",()=>{
+    const text=["memo_1","memo_2","memo_3","memo_4"].map((k,i)=>`=== Layer ${i+1} ===\n${ST.ws[k]||"(empty)"}`).join("\n\n");
+    navigator.clipboard.writeText(text).then(()=>showToast("✅ Copied!")).catch(()=>showToast("Please copy manually"));
+  });
+
+  // Worksheet textareas
+  document.querySelectorAll("[data-wskey]").forEach(el=>{
+    el.addEventListener("input",function(){wsChange(this);});
+  });
+
+  // ══ C1: 三地對照表互動（點格子循環 ?/H/M/L）══
+  document.querySelectorAll("[data-c1guess]").forEach(td=>{
+    td.addEventListener("click",function(){
+      const [loc,dim] = this.dataset.c1guess.split("|");
+      const key = loc+"_"+dim;
+      const cur = (ST.c1Guess && ST.c1Guess[key]) || "?";
+      const next = {"?":"H","H":"M","M":"L","L":"?"}[cur];
+      if(!ST.c1Guess) ST.c1Guess={};
+      if(next==="?") delete ST.c1Guess[key]; else ST.c1Guess[key]=next;
+      save(); render();
+    });
+  });
+  const c1RB = document.getElementById("c1GuessReveal");
+  if(c1RB) c1RB.addEventListener("click",()=>{
+    ST.c1RevealKey = !ST.c1RevealKey; save(); render();
+  });
+  const c1Rst = document.getElementById("c1GuessReset");
+  if(c1Rst) c1Rst.addEventListener("click",()=>{
+    ST.c1Guess={}; ST.c1RevealKey=false; save(); render();
+  });
+
+  // ══ C2: 預設情境一鍵套用 ══
+  document.querySelectorAll("[data-preset]").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      const presets={
+        tn:{disc:7.75,carbon:114,eff:1},
+        cfo:{disc:10.30,carbon:0,eff:0},
+        green:{disc:7.75,carbon:200,eff:1},
+        pure:{disc:9.00,carbon:0,eff:0},
+        cbam:{disc:8.50,carbon:130,eff:1}
+      };
+      const p = presets[this.dataset.preset];
+      if(p){ ST.npv={...ST.npv,...p}; save(); render(); }
+    });
+  });
+
+  // ══ C2: 情境快照 ══
+  const snapAdd = document.getElementById("snapshotAdd");
+  if(snapAdd) snapAdd.addEventListener("click",()=>{
+    if(ST.c2Snapshots.length>=4){
+      showToast(ST.lang==="zh"?"最多只能存 4 個快照":"Maximum 4 snapshots");
+      return;
+    }
+    const snap = computeNpvSnapshot(ST.npv);
+    ST.c2Snapshots.push({
+      label: ST.lang==="zh" ? "快照 "+(ST.c2Snapshots.length+1) : "Snap "+(ST.c2Snapshots.length+1),
+      disc: ST.npv.disc, carbon: ST.npv.carbon, eff: ST.npv.eff,
+      npv: snap.npv, irr: snap.irr
+    });
+    save(); render();
+    showToast(ST.lang==="zh"?"✅ 已儲存快照":"✅ Snapshot saved");
+  });
+  const snapClr = document.getElementById("snapshotClear");
+  if(snapClr) snapClr.addEventListener("click",()=>{
+    if(confirm(ST.lang==="zh"?"清空所有快照？":"Clear all snapshots?")){
+      ST.c2Snapshots=[]; save(); render();
+    }
+  });
+  document.querySelectorAll("[data-snapdel]").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      const i=parseInt(this.dataset.snapdel);
+      ST.c2Snapshots.splice(i,1); save(); render();
+    });
+  });
+
+  // Nav clicks
+  document.querySelectorAll("[data-view]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      ST.view=btn.dataset.view; save(); render();
+      content.scrollTop=0;
+    });
+  });
+}
+
+function setupClassify(){
+  const bank=document.getElementById("chipBank");
+  const cols=document.querySelectorAll("[data-cat]");
+  if(!bank) return;
+  bank.querySelectorAll("[data-chip]").forEach(chip=>{
+    chip.setAttribute("draggable","true");
+    chip.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",chip.dataset.chip);chip.classList.add("dragging");});
+    chip.addEventListener("dragend",()=>chip.classList.remove("dragging"));
+  });
+  cols.forEach(col=>{
+    col.addEventListener("dragover",e=>{e.preventDefault();col.classList.add("over");});
+    col.addEventListener("dragleave",()=>col.classList.remove("over"));
+    col.addEventListener("drop",e=>{
+      e.preventDefault();col.classList.remove("over");
+      const cid=e.dataTransfer.getData("text/plain");
+      ST.classifyDone["t1_"+cid]=col.dataset.cat;
+      save(); render();
+    });
+  });
+}
+
+function wsChange(el){
+  ST.ws[el.dataset.wskey]=el.value; save();
+  const wc=el.nextElementSibling;
+  if(wc&&wc.classList.contains('memoWordCount')){
+    const n=countWords(el.value);
+    wc.textContent=n+' '+(ST.lang==="zh"?"字":"words");
+  }
+}
+
+// ═══ NPV calculator (Michelin Project Gemini, simplified) ═══
+// Anchored to case teaching-note numbers (Michelin production capacity decision):
+//   base case @ 7.75% (agriculture β) → NPV ≈ $26.6M, IRR ≈ 12.6%
+//   @ 9.83% (auto β) → NPV ≈ $10.9M ; @ 10.30% (tire β) → NPV ≈ $13.5M
+// We reproduce a stylized FCF path that matches those anchors.
+// Approach: sketch 10-year incremental FCF, add terminal recovery of NWC+NBV.
+function updateNpv(){
+  const p=ST.npv;
+  // Incremental OE track production ramp 2023-2032 (from TN Ex 2, thousands rounded)
+  const incOE  = [0,0,623,2931,6604,8823,10485,12157,13582,13582];
+  const incRT  = [0,0,391,1813,2807,3174,3186,3216,3036,3016];
+  // Prices: OE $8000, RT $6000, escalated at inflation-0.5%
+  const infl = [0.041,0.030,0.029,0.033,0.022,0.018,0.022,0.022,0.023,0.023]; // 2023-2032
+  let pOE=8000, pRT=6000, pMat=3000, pProd=2000, pLog=500;
+  const matF=[], prodF=[], logF=[], revF=[];
+  for(let y=0;y<10;y++){
+    if(y>0){ pOE*=(1+infl[y-1]); pRT*=(1+infl[y-1]); pMat*=(1+infl[y-1]); pProd*=(1+infl[y-1]-0.005); pLog*=(1+infl[y-1]); }
+    revF[y] = incOE[y]*pOE + incRT[y]*pRT;
+    matF[y] = (incOE[y]+incRT[y])*pMat;
+    prodF[y]= (incOE[y]+incRT[y])*pProd;
+    logF[y] = (incOE[y]+incRT[y])*pLog;
+  }
+  // Production efficiency gains on EXISTING 40k/yr production (stylized, net of capex)
+  // TN Exhibit 9 implies modest savings: ~1% of production cost post-upgrade, held constant.
+  // We model 0, 0.5%, 1.0%, 1.5% ramp then flat 1.5% cumulative.
+  const cumEff=[0,0,0.005,0.010,0.015,0.015,0.015,0.015,0.015,0.015];
+  const existingProd = 40000; // tracks/yr existing capacity
+  const savingsOnExisting = cumEff.map((c,y)=> p.eff ? existingProd*pProd*c : 0);
+  // Capex + opex schedule (2022-2025 = years -1,0,1,2 of the project window)
+  // In our 10-year 2023-2032 window, the heavy capex is 2023-2025
+  const capex    = [30000000, 40000000, 27000000, 0,0,0,0,0,0,0];
+  const buildCap = [10000000, 10000000, 0, 0,0,0,0,0,0,0];
+  const equipCap = [20000000, 30000000, 27000000, 0,0,0,0,0,0,0];
+  const nrOpex   = [530000, 485000, 200000, 0,0,0,0,0,0,0];
+  // Depreciation: building 1/25, equipment 1/15, cumulative
+  const depr = [];
+  let bCum=3000000, eCum=0;
+  for(let y=0;y<10;y++){
+    bCum += buildCap[y];
+    eCum += equipCap[y];
+    depr[y] = bCum/25 + eCum/15;
+  }
+  const recurOpex = revF.map(r=>0.015*r); // SG&A + warranty + commissions (~1.5% of rev, per TN)
+  // Carbon cost: energy ramp (MWh): elec 0,0,1808,3617,5425,7233,9042,10572,10850,10850 ; thermal 0,0,1692,3383,5075,6767,8458,10150,10150,10150
+  const elec    = [0,0,1808,3617,5425,7233,9042,10572,10850,10850];
+  const thermal = [0,0,1692,3383,5075,6767,8458,10150,10150,10150];
+  const carbonCost = elec.map((e,y)=> (e*0.510 + thermal[y]*0.202) * p.carbon );
+  // NWC investment: 20% of ΔRevenue each year (per TN methodology). Recovered at terminal.
+  const deltaNwc = revF.map((r,y)=> 0.20 * (r - (y>0?revF[y-1]:0)) );
+  const totalNwc = deltaNwc.reduce((a,b)=>a+b,0);
+  // FCF per year
+  const r = p.disc/100;
+  const T = 0.25;
+  let npvSum = 0;
+  const rows = [];
+  for(let y=0;y<10;y++){
+    const rev = revF[y];
+    const varCost = matF[y] + prodF[y] + logF[y];
+    const savExist = savingsOnExisting[y];
+    const ebit  = rev - varCost - recurOpex[y] - nrOpex[y] - depr[y] + savExist;
+    const ebiat = ebit * (1 - T);
+    const fcfOp = ebiat + depr[y] - capex[y] - deltaNwc[y];
+    const fcfCarbon = -carbonCost[y] * (1-T);
+    const fcf = fcfOp + fcfCarbon;
+    const disc = Math.pow(1+r, y+1); // year 2023 discounted by (1+r)^1 from 2022 NPV date
+    npvSum += fcf / disc;
+    rows.push({y:2023+y, rev, ebit, fcf, fcfCarbon, disc, pv:fcf/disc});
+  }
+  // Terminal recovery at end 2032: NWC release + residual PP&E book value. Stylized.
+  const bookVal = 15000000; // residual PP&E book value after 10y depreciation
+  const termRecovery = bookVal + totalNwc; // NWC recovered at end
+  const termDisc = Math.pow(1+r, 10);
+  npvSum += termRecovery / termDisc;
+
+  // IRR via bisection on the cashflow stream
+  function npvAtRate(rate){
+    let s = 0;
+    for(let i=0;i<rows.length;i++) s += rows[i].fcf / Math.pow(1+rate,i+1);
+    s += termRecovery / Math.pow(1+rate,10);
+    return s;
+  }
+  let lo=0.001, hi=0.40;
+  for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(npvAtRate(m)>0) lo=m; else hi=m; }
+  const irr = (lo+hi)/2 * 100;
+
+  // Carbon-only NPV (separate total)
+  let carbonNpv = 0;
+  for(let y=0;y<10;y++){ carbonNpv += (-carbonCost[y]*(1-T)) / Math.pow(1+r, y+1); }
+
+  const fmt = v => (Math.abs(v)>=1e9)?(v/1e9).toFixed(2)+"B":(Math.abs(v)>=1e6)?(v/1e6).toFixed(1)+"M":(Math.abs(v)>=1e3)?(v/1e3).toFixed(0)+"K":v.toFixed(0);
+  const zh = ST.lang==="zh";
+  const box = document.getElementById("npvResultBox");
+  if(!box) return;
+  box.innerHTML = `
+    <div class="npvResultCard">
+      <div class="npvResultLabel">${zh?"專案 NPV（含碳）":"Project NPV (incl. carbon)"}</div>
+      <div class="npvResultValue ${npvSum>=0?'npvDecisionGood':'npvDecisionBad'}">${npvSum>=0?'+':'-'}$${fmt(Math.abs(npvSum))}</div>
+      <div class="sm" style="margin-top:4px;">@ ${p.disc.toFixed(2)}% ${zh?"折現率":"disc. rate"}</div>
+    </div>
+    <div class="npvResultCard">
+      <div class="npvResultLabel">IRR</div>
+      <div class="npvResultValue ${irr>=p.disc?'npvDecisionGood':'npvDecisionBad'}">${irr.toFixed(1)}%</div>
+      <div class="sm" style="margin-top:4px;">vs ${p.disc.toFixed(2)}% ${zh?"要求報酬":"hurdle"}</div>
+    </div>
+    <div class="npvResultCard">
+      <div class="npvResultLabel">${zh?"碳成本 NPV（單獨）":"Carbon NPV (isolated)"}</div>
+      <div class="npvResultValue" style="color:#7C2D12;">-$${fmt(Math.abs(carbonNpv))}</div>
+      <div class="sm" style="margin-top:4px;">@ $${p.carbon.toFixed(0)}/tCO₂</div>
+    </div>`;
+  // update slider displayed values
+  const valDisc=document.getElementById("npvVal_disc");
+  if(valDisc) valDisc.textContent = p.disc.toFixed(2)+"%";
+  const valCarb=document.getElementById("npvVal_carbon");
+  if(valCarb) valCarb.textContent = "$"+p.carbon.toFixed(0);
+  const valEff=document.getElementById("npvVal_eff");
+  if(valEff) valEff.textContent = p.eff ? (zh?"含":"ON") : (zh?"不含":"OFF");
+  // FCF row highlight
+  const fcfBody = document.getElementById("fcfTableBody");
+  if(fcfBody){
+    fcfBody.innerHTML = rows.map(r=>`<tr>
+      <td style="font-weight:800;">${r.y}</td>
+      <td style="text-align:right;">$${fmt(r.rev)}</td>
+      <td style="text-align:right;">$${fmt(r.ebit)}</td>
+      <td style="text-align:right;color:#7C2D12;">-$${fmt(Math.abs(r.fcfCarbon))}</td>
+      <td style="text-align:right;font-weight:800;color:${r.fcf>=0?'#14532D':'#7f1d1d'};">$${fmt(r.fcf)}</td>
+      <td style="text-align:right;color:#475569;">$${fmt(r.pv)}</td>
+    </tr>`).join("");
+  }
+  // Sensitivity table: NPV at 3 canonical discount rates (7.75% / 9.83% / 10.30%)
+  const sensBody = document.getElementById("sensTableBody");
+  if(sensBody){
+    const rates = [
+      {r:7.75, lab_zh:"農業 β=0.83（本案推薦）", lab_en:"Agriculture β=0.83 (recommended)"},
+      {r:9.83, lab_zh:"汽車 β=1.24（若依汽車分部）", lab_en:"Auto β=1.24 (if auto segment)"},
+      {r:10.30,lab_zh:"輪胎 β=1.34（整體集團）", lab_en:"Tire β=1.34 (whole group)"}
+    ];
+    sensBody.innerHTML = rates.map(rr=>{
+      const rate = rr.r/100;
+      let s=0;
+      for(let i=0;i<rows.length;i++) s += rows[i].fcf / Math.pow(1+rate, i+1);
+      s += termRecovery / Math.pow(1+rate, 10);
+      const decision = s>=0 ? (zh?"接受":"Accept") : (zh?"否決":"Reject");
+      const col = s>=0 ? "#14532D" : "#7F1D1D";
+      return `<tr>
+        <td>${zh?rr.lab_zh:rr.lab_en}</td>
+        <td style="text-align:right;">${rr.r.toFixed(2)}%</td>
+        <td style="text-align:right;font-weight:800;color:${col};">${s>=0?'+':'-'}$${fmt(Math.abs(s))}</td>
+        <td style="font-weight:700;color:${col};">${decision}</td>
+      </tr>`;
+    }).join("");
+  }
+  // Plain-language summary line
+  const sumBox = document.getElementById("npvSummaryLine");
+  if(sumBox){
+    const go = npvSum>=0;
+    sumBox.innerHTML = zh
+      ? `以 <strong>${p.disc.toFixed(2)}%</strong> 折現、碳價 <strong>$${p.carbon}/tCO₂</strong>、效率升級 <strong>${p.eff?"已":"未"}</strong>計入，本案 NPV = <strong style="color:${go?'#14532D':'#7F1D1D'};">${go?'+':'-'}$${fmt(Math.abs(npvSum))}</strong>，IRR = <strong>${irr.toFixed(1)}%</strong>。→ <strong style="color:${go?'#14532D':'#7F1D1D'};">${go?"接受 Project Gemini":"否決 Project Gemini"}</strong>`
+      : `At discount <strong>${p.disc.toFixed(2)}%</strong>, carbon price <strong>$${p.carbon}/tCO₂</strong>, efficiency upgrade <strong>${p.eff?"INCLUDED":"EXCLUDED"}</strong>, the project NPV = <strong style="color:${go?'#14532D':'#7F1D1D'};">${go?'+':'-'}$${fmt(Math.abs(npvSum))}</strong>, IRR = <strong>${irr.toFixed(1)}%</strong>. → <strong style="color:${go?'#14532D':'#7F1D1D'};">${go?"ACCEPT Project Gemini":"REJECT Project Gemini"}</strong>`;
+  }
+
+  // ══ Breakeven display (IRR is the breakeven discount rate) ══
+  const beBox = document.getElementById("breakevenBox");
+  if(beBox){
+    const delta = irr - p.disc;
+    const robust = delta >= 3 ? (zh?"穩健":"Robust") : (delta >= 1 ? (zh?"邊緣":"Marginal") : (zh?"危險":"Fragile"));
+    const robustCol = delta >= 3 ? "#14532D" : (delta >= 1 ? "#B45309" : "#991B1B");
+    beBox.innerHTML = `<span style="font-size:28px;">${irr.toFixed(2)}%</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:600;font-family:var(--sans);margin-left:8px;">${zh?"（目前 WACC ":"(current WACC "}${p.disc.toFixed(2)}%, <span style="color:${robustCol};">Δ ${delta>=0?'+':''}${delta.toFixed(2)}pp · ${robust}</span>）</span>`;
+  }
+
+  // ══ Sustainability path NPV contributions (live-linked to ⑦) ══
+  const s1El = document.getElementById("sust1");
+  if(s1El){ s1El.textContent = (carbonNpv>=0?"+":"−")+"$"+fmt(Math.abs(carbonNpv)); }
+  const s2El = document.getElementById("sust2");
+  if(s2El){
+    // Approximate: sum discounted efficiency savings × (1-T)
+    let effNpv = 0;
+    if(p.eff){
+      // existingProd × pProd × cumEff × (1-T) per year minus $9.6M upfront
+      // We replicate the path above
+      const cumEff2=[0,0,0.005,0.010,0.015,0.015,0.015,0.015,0.015,0.015];
+      let pProd2 = 2000;
+      const infl2 = [0.041,0.030,0.029,0.033,0.022,0.018,0.022,0.022,0.023,0.023];
+      for(let y=0;y<10;y++){
+        if(y>0) pProd2*=(1+infl2[y-1]-0.005);
+        const save = 40000 * pProd2 * cumEff2[y] * (1-T);
+        effNpv += save / Math.pow(1+r, y+1);
+      }
+      effNpv -= 9600000;  // Green upgrade capex assumed in Y1 (approximate: no discounting)
+    }
+    s2El.textContent = (effNpv>=0?"+":"−")+"$"+fmt(Math.abs(effNpv));
+  }
+
+  // Snapshot count updater
+  const snapCt = document.getElementById("snapCount");
+  if(snapCt) snapCt.textContent = String(ST.c2Snapshots.length);
+}
+
+// ══ Compute NPV+IRR for snapshot saving (reuses updateNpv's logic in standalone form) ══
+function computeNpvSnapshot(npv){
+  const incOE = [0,0,623,2931,6604,8823,10485,12157,13582,13582];
+  const incRT = [0,0,391,1813,2807,3174,3186,3216,3036,3016];
+  const infl  = [0.041,0.030,0.029,0.033,0.022,0.018,0.022,0.022,0.023,0.023];
+  let pOE=8000, pRT=6000, pMat=3000, pProd=2000, pLog=500;
+  const revF=[], matF=[], prodF=[], logF=[];
+  for(let y=0;y<10;y++){
+    if(y>0){ pOE*=(1+infl[y-1]); pRT*=(1+infl[y-1]); pMat*=(1+infl[y-1]); pProd*=(1+infl[y-1]-0.005); pLog*=(1+infl[y-1]); }
+    revF[y] = incOE[y]*pOE + incRT[y]*pRT;
+    matF[y] = (incOE[y]+incRT[y])*pMat;
+    prodF[y]= (incOE[y]+incRT[y])*pProd;
+    logF[y] = (incOE[y]+incRT[y])*pLog;
+  }
+  const cumEff=[0,0,0.005,0.010,0.015,0.015,0.015,0.015,0.015,0.015];
+  const savingsOnExisting = cumEff.map((cc,y)=> npv.eff ? 40000*pProd*cc : 0);
+  const capex = [30000000,40000000,27000000,0,0,0,0,0,0,0];
+  const buildCap = [10000000,10000000,0,0,0,0,0,0,0,0];
+  const equipCap = [20000000,30000000,27000000,0,0,0,0,0,0,0];
+  const nrOpex = [530000,485000,200000,0,0,0,0,0,0,0];
+  const depr=[]; let bCum=3000000, eCum=0;
+  for(let y=0;y<10;y++){ bCum+=buildCap[y]; eCum+=equipCap[y]; depr[y]=bCum/25+eCum/15; }
+  const recurOpex = revF.map(rv=>0.015*rv);
+  const elec=[0,0,1808,3617,5425,7233,9042,10572,10850,10850];
+  const thermal=[0,0,1692,3383,5075,6767,8458,10150,10150,10150];
+  const carbonCost = elec.map((e,y)=> (e*0.510+thermal[y]*0.202)*npv.carbon);
+  const deltaNwc = revF.map((rv,y)=> 0.20*(rv-(y>0?revF[y-1]:0)));
+  const totalNwc = deltaNwc.reduce((a,b)=>a+b,0);
+  const r = npv.disc/100, T=0.25;
+  const fcfs=[];
+  let npvSum=0;
+  for(let y=0;y<10;y++){
+    const rv=revF[y], varCost=matF[y]+prodF[y]+logF[y], savExist=savingsOnExisting[y];
+    const ebit = rv-varCost-recurOpex[y]-nrOpex[y]-depr[y]+savExist;
+    const ebiat = ebit*(1-T);
+    const fcfOp = ebiat+depr[y]-capex[y]-deltaNwc[y];
+    const fcfC = -carbonCost[y]*(1-T);
+    const fcf = fcfOp + fcfC;
+    fcfs.push(fcf);
+    npvSum += fcf / Math.pow(1+r, y+1);
+  }
+  const termRecovery = 15000000 + totalNwc;
+  npvSum += termRecovery / Math.pow(1+r, 10);
+  // IRR via bisection
+  let lo=0.001, hi=0.40;
+  for(let i=0;i<60;i++){
+    const m=(lo+hi)/2;
+    let s=0;
+    for(let y=0;y<10;y++) s += fcfs[y] / Math.pow(1+m,y+1);
+    s += termRecovery / Math.pow(1+m,10);
+    if(s>0) lo=m; else hi=m;
+  }
+  return { npv: npvSum, irr: (lo+hi)/2*100 };
+}
+
+// Keyboard nav
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA"||e.target.tagName==="INPUT") return;
+  const i=VIEW_ORDER.indexOf(ST.view);
+  if(e.key==="ArrowRight"&&i<VIEW_ORDER.length-1){ST.view=VIEW_ORDER[i+1];save();render();content.scrollTop=0;}
+  if(e.key==="ArrowLeft"&&i>0){ST.view=VIEW_ORDER[i-1];save();render();content.scrollTop=0;}
+  if(e.key==="l"||e.key==="L"){ST.lang=ST.lang==="zh"?"en":"zh";save();render();}
+  if(e.key==="p"||e.key==="P"){ST.presenter=!ST.presenter;document.body.classList.toggle("presenter",ST.presenter);save();}
+  if(e.key==="r"||e.key==="R"){if(confirm("Reset all state?")){localStorage.removeItem(STORE);ST={...DEF};render();}}
+});
+
+// Control buttons
+document.getElementById("btnLang").addEventListener("click",()=>{ST.lang=ST.lang==="zh"?"en":"zh";save();render();});
+document.getElementById("btnPresenter").addEventListener("click",()=>{ST.presenter=!ST.presenter;document.body.classList.toggle("presenter",ST.presenter);save();showToast(ST.presenter?"投影模式 ON":"投影模式 OFF");});
+document.getElementById("btnReset").addEventListener("click",()=>{if(confirm("Reset all state?")){localStorage.removeItem(STORE);ST={...DEF};render();}});
+document.getElementById("btnStudent").addEventListener("click",()=>{ST.view="student";save();render();content.scrollTop=0;});
+document.getElementById("btnHelp").addEventListener("click",()=>showToast("⬅ ➡ 切換段落 | L 語言 | P 投影 | R 重置"));
+
+// ── AI Hint Card v6: collapse/expand with localStorage persistence ──
+const AI_HINT_KEY = "w8_aiHint_collapsed";
+const aiHintEl = document.getElementById("aiHint");
+const aiHintBtn = document.getElementById("aiHintClose");
+// Restore state
+if(localStorage.getItem(AI_HINT_KEY) === "1"){
+  aiHintEl.classList.add("collapsed");
+}
+aiHintBtn.addEventListener("click", () => {
+  aiHintEl.classList.toggle("collapsed");
+  localStorage.setItem(AI_HINT_KEY, aiHintEl.classList.contains("collapsed") ? "1" : "0");
+});
+
+// Initial render
+render();
+</script>
+</body></html>
